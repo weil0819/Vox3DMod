@@ -123,7 +123,7 @@ if __name__=='__main__':
 		print('Input file exists')
 
 	print('********** Opening .xyz file **********')
-	xyzlist = []	# store xyz in each line from raw data file
+	xyzset = set()		# store xyz in each line from raw data file
 	message = 'Opening "{}"'.format(args.input)	# output message
 	with stopwatch(message):
 		with open(args.input, mode='r', encoding='utf-8') as f:
@@ -131,25 +131,30 @@ if __name__=='__main__':
 				line = f.readline().strip()
 				if not line:
 					break
-				xyzlist.append([int(i) for i in line.split()[:3]])
+				xyzset.add(tuple(int(i) for i in line.split()[:3]))
 
 	print('********** Writing .obj file **********')
 	message = 'Writing "{}"'.format(args.output)
 	with stopwatch(message):
 		with open(args.output, mode='w', encoding='utf-8') as f:
-			for line in xyzlist:
+			# Ouput faces.
+			for line in xyzset:
 				x, y, z = line[0], line[1], line[2]
-				if [x,y,z-1] not in xyzlist:
+				if (x,y,z-1) not in xyzset:
 					f.write(face(x,y,z,   x,y+1,z,   x+1,y+1,z,   x+1,y,z))
-				if [x,y,z+1] not in xyzlist:
+				if (x,y,z+1) not in xyzset:
 					f.write(face(x,y,z+1, x+1,y,z+1, x+1,y+1,z+1, x,y+1,z+1))
-				if [x,y-1,z] not in xyzlist:
+				if (x,y-1,z) not in xyzset:
 					f.write(face(x,y,z,   x+1,y,z,   x+1,y,z+1,   x,y,z+1))
-				if [x,y+1,z] not in xyzlist:
+				if (x,y+1,z) not in xyzset:
 					f.write(face(x,y+1,z, x,y+1,z+1, x+1,y+1,z+1, x+1,y+1,z))
-				if [x-1,y,z] not in xyzlist:
+				if (x-1,y,z) not in xyzset:
 					f.write(face(x,y,z,   x,y,z+1,   x,y+1,z+1,   x,y+1,z))
-				if [x+1,y,z] not in xyzlist:
+				if (x+1,y,z) not in xyzset:
 					f.write(face(x+1,y,z, x+1,y+1,z, x+1,y+1,z+1, x+1,y,z+1))
+
+			# Output vertices.
+			for i in range(1, idx+1):
+				f.write('v '+XYZ[i]+'\n')
 
 
