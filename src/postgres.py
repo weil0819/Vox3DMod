@@ -2,15 +2,15 @@
 # -*- coding: utf-8 -*-
 
 """
+Func:
 - Connect PostgreSQL Database.
-- Manage PostgreSQL Database.
-- Import & Export Data.
-- Query Data.
+- Import Data.
+
 
 Usage:
-> python postgres.py --db_name='YOUR DATABASE NAME' --user='YOUR USER NAME' --password='YOUR PASSWORD' --op='YOUR OPERATION'
-E.g.,
-> python postgres.py --db_name='voxeldb' --user='postgres' --password='postgres' --op='create'
+> python postgres.py --input='YOUR DATA PATH' --dbname='YOUR DATABASE NAME' --host='YOUR HOST ADDRESS' --user='YOUR USER NAME' --pwd='YOUR PASSWORD' --tbname='YOUR TABLE NAME'
+e.g.,
+> python postgres.py --input='../bim.xyz' --dbname='voxeldb' --host='localhost' --user='postgres' --pwd='postgres' --tabname='Dalton' 
 
 @date: May 28, 2020
 @author: Wesley
@@ -35,129 +35,96 @@ from platform import python_version
 print('Python Version: ', python_version())
 
 
-def connect():
-	'''	
-	:function:
-		- Connect to the PostgreSQL database server.
-	:return:
-		- cursor object and connection object.
-	'''
-	conn = None
-	try:
-		params = config()						# read connection parameters
-
-		print('Connecting to the PostgreSQL database ...')
-		conn = psycopg2.connect(**params)		# connect to the PostgreSQL server
-
-		cur = conn.cursor()						# create a cursor
-
-		print('PostgreSQL database version:')	# execute a statement
-		cur.execute('SELECT version()')
-
-		db_version = cur.fetchone()				# display the PostgreSQL database server version
-		print(db_version)
-
-		cur.close()								# close the communication with the PostgreSQL
-	except (Exception, psycopg2.DatabaseError) as error:
-		print(error)
-	finally:
-		return conn
-
-
-def connect(user, password, host='localhost'):
+def create_db(user, password, dbname, tbname, host='localhost'):
 	'''
 	:function:
-		- Create a database
+		- Create a database and tables 
 	:param host:
 		- The host address	
-	:param database:
+	:param dbname:
 		- The database name
+	:param tbname:
+		- The table name
 	:param user:
 		- The user name
 	:param password:
 		- The password
+	:return conn:
+		- The connection object
 	'''
+	conn = None
 	try:
 		print('Connecting to the PostgreSQL database ...')
-		conn = psycopg2.connect("'host='" + host + "' user='" + user + "' password='" + password + "'")
-
+		conn = psycopg2.connect("host='" + host + "' user='" + user + "' password='" + password + "'")		
 		cur = conn.cursor()
 
-		print('PostgreSQL database version:')	# execute a statement
-		cur.execute('SELECT version()')
-
-		db_version = cur.fetchone()				# display the PostgreSQL database server version
+		print('PostgreSQL database version:')		# execute a statement
+		cur.execute('SELECT version();')
+		db_version = cur.fetchone()					# display the PostgreSQL database server version
 		print(db_version)
 
-		cur.close()								# close the communication with the PostgreSQL
+		cur.execute('SELECT datname FROM pg_database;')
+		list_database = cur.fetchall()
+		if (dbname,) in list_database:
+			print("'{}' Database already exists ...".format(dbname))
+		else:
+			cur.execute('CREATE DATABASE ' + dbname + ';')
+		cur.close()
+		con.close()
+
+		conn = psycopg2.connect("host='" + host + "' database='" + dbname + "' user='" + user + "' password='" + password + "'")
+		cur = conn.cursor()
+		cur.execute('CREATE EXTENSION POSTGIS;')
+		cur.execute('CREATE TABLE '+ tbname + ' (voxid SERIAL PRIMARY KEY, x INTEGER NOT NULL, y INTEGER NOT NULL, z INTEGER NOT NULL, objNum INTEGER;')
+		cur.close()
+		conn.commit()	# commit the changes		
 	except (Exception, psycopg2.DatabaseError) as error:
 		print(error)
 	finally:
-		return conn
+		# return conn
+		if conn is not None:
+			conn.close()
 
-
-def disconnect(conn):
+"""
+def write_db(conn, tbname, file):
 	'''
 	:function:
-		- Disconnect to the PostgreSQL database server.
+		- Write xyz data into a database
 	:param conn:
 		- The connection object
+	:param tbname:
+		- The table name
+	:param file:
+		- The input file
 	'''
 	if conn is not None:
-		conn.close()
-		print('Database connection closed.')
+		try:
+			cur = conn.cursor()
+			with open(file, mode='r', encoding='utf-8') as f:
+				while(True):
+					line = f.readline().strip()
+					if not line:
+						break
+					cur.execute("INSERT INTO " + tbname + " VALUES('{}')".format(line.split()[0], line.split()[1], line.split()[2], line.split()[3]))
+		except (Exception, psycopg2.DatabaseError) as error:
+	        print(error)
+	    finally:
+	        if conn is not None:
+	            conn.close()
+	            print('Database connection closed.')
 
-
-def create_db(dbname):
-	'''
-	:function:
-		- Create a database
-	:param db_name:
-		- The database name
-	:param conn:
-		- The connection object
-	'''
-
-	conn = connect()
-	cur = conn.cursor()
-
-	try:
-		cur.execute('DROP DATABASE ' + dbname)
-		print('Database already exists, replacing database')
-	except:
-		pass
-	finally:
-		cur.execute('CREATE DATABASE ' + dbname)
-		cur.close()
-
-
-def drop_db(dbname):
-	'''
-	:function:
-		- Drop a database
-	:param db_name:
-		- The database name
-	:param conn:
-		- The connection object
-	'''
-
-	conn = connect()
-	cur = conn.cursor()
-
-	try:
-		cur.execute('DROP DATABASE ' + dbname)
-	except (Exception, psycopg2.DatabaseError) as error:
-		print(error)
-	finally:
-		disconnect(conn)
-
-
-
-
+"""
 
 if __name__=='__main__':
 	print('********** Initializing ArgumentParser and related arguments **********')
 	arg_parser = create_arg_parser()
 	args = arg_parser.parse_args(sys.argv[1:])
+
+	# ********** Creating Database **********
+	conn = create_db(args.user, args.pwd, args.dbname, args.tbname, args.host)
+
+	# ********** Writing Database **********
+	# write_db(conn, args.tbname, args.input)
+
 
 

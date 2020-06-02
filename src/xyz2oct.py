@@ -9,7 +9,7 @@ Usage:
 E.g.,
 > python xyz2oct.py --input='./data/bim/Dalton/classmodel.xyz' --output='./data/bim/Dalton/classmodel.oct'
 
-@date: May 28, 2020
+@date: June 1, 2020
 @author: Wesley
 
 """
