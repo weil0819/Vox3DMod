@@ -24,9 +24,6 @@ import os
 import sys
 import argparse
 import psycopg2
-import time
-import contextlib
-from config import config
 import warnings
 warnings.filterwarnings('ignore')
 
@@ -117,8 +114,14 @@ def write_db(conn, tbname, file):
 
 if __name__=='__main__':
 	print('********** Initializing ArgumentParser and related arguments **********')
-	arg_parser = create_arg_parser()
-	args = arg_parser.parse_args(sys.argv[1:])
+	parser = argparse.ArgumentParser(description='Argument list', formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+    parser.add_argument('--input', help='directory for input data')
+    parser.add_argument('--user', help='username')
+    parser.add_argument('--pwd', help='user password')
+    parser.add_argument('--dbname', help='database name')
+    parser.add_argument('--tbname', help='table name')
+    parser.add_argument('--host', help='host address')
+	args = parser.parse_args(sys.argv[1:])
 
 	# ********** Creating Database **********
 	conn = create_db(args.user, args.pwd, args.dbname, args.tbname, args.host)

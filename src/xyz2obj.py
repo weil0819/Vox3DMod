@@ -7,7 +7,7 @@ Making an .obj file from a voxel.xyz.
 Usage:
 > python xyz2obj.py --input='YOUR INPUT DATA PATH' --output='YOUR OUTPUT DATA PATH'
 E.g.,
-> python xyz2obj.py --input='./data/bim/Dalton/classmodel.xyz' --output='./data/bim/Dalton/classmodel.obj'
+> python xyz2obj.py --input='../data/bim/Dalton/classmodel.xyz' --output='../data/bim/Dalton/classmodel.obj'
 
 @date: May 26, 2020
 @author: Wesley
@@ -20,8 +20,7 @@ from __future__ import division
 import os
 import sys
 import argparse
-import time
-import contextlib
+from config import stopwatch
 import warnings
 warnings.filterwarnings('ignore')
 
@@ -39,42 +38,6 @@ XYZ = {
 	0: '-1 -1 -1'
 }
 
-@contextlib.contextmanager
-def stopwatch(message):    
-    '''
-    :function:
-        - A context manager to print the run time of a block of code.
-    :param message:
-        - The message pertaining to the block of code to be executed. (str)
-    :return:
-        - A dictionary containing the message and elapsed time.
-    '''
-    
-    t0 = time.time()
-    try:
-        yield
-    finally:
-        t1 = time.time()
-        print('Total elapsed time for %s: %.3f' % (message, t1 - t0))
-        return {
-            'message': message,
-            'elapsed_time': (t1 - t0)
-        }
-
-
-# Utility functions.
-def create_arg_parser():
-	'''
-	:function:
-		- Creates and returns the ArgumentParser object.
-	:return 
-		- An ArgumentParser object
-	'''
-	parser = argparse.ArgumentParser(description='Input and output data path', formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-	parser.add_argument('--input', help='directory for input data')
-	parser.add_argument('--output', help='directory for output data')
-
-	return parser
 
 def vertex(x, y, z):
 	'''
@@ -117,8 +80,10 @@ def face(x1,y1,z1, x2,y2,z2, x3,y3,z3, x4,y4,z4):
 
 if __name__=='__main__':
 	print('********** Initializing ArgumentParser and related arguments **********')
-	arg_parser = create_arg_parser()
-	args = arg_parser.parse_args(sys.argv[1:])
+	parser = argparse.ArgumentParser(description='Input and output data path', formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+	parser.add_argument('--input', help='directory for input data')
+	parser.add_argument('--output', help='directory for output data')
+	args = parser.parse_args(sys.argv[1:])
 	if os.path.exists(args.input):
 		print('Input file exists')
 
