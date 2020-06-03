@@ -5,6 +5,12 @@ Data in .xyz for mat is the final voxel files, and <x,y,z,value>. THe voxel size
 There are 52 buildings, the value is the building number.
 There are two dtm's (you only need one). The one called dtm is the terrain like if there were no builidngs. The one called dtmbot is a terrain with holes, in which the buildings fit (buildings extend 3m under the terrain). So if you use dtm together with the buildings, some voxels will occur twice: in the terrain and in a building. It you use dtmbot, instead of dtm, all voxels will be unique: either terrain or building.
 
+```
+cp ../script/ExpandAll ../script/Wcpipe ./build
+cd build
+./ExpandAll
+```
+
 For BIM data:
 The BIM model stuff is a little bit more complicated. You have 6 folders, one per building. The resolution is 10 cm, the values in the 4th column are objectnumbers, starting from 1. In each folder is a file called CLASS with on each line i the class of object i (a string). In the top folder is a file called ALLCLASSES with 26 of those strings.
 

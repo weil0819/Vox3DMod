@@ -18,6 +18,7 @@ cat <file> | wc -l
 - pol2class.awk file
 > Transfer 'objNum' to 'classNum', that is, we just consider which class the voxel belong to.
 ```
+cp ../../script/pol2class.awk ./
 chmod 755 pol2class.awk
 ../pol2class.awk < polmodel.xyz > classmodel.xyz
 ```
@@ -34,6 +35,7 @@ du -sh
 - mkobj2.awk file
 > make an .obj file from a voxel .xyz file.
 ```
+cp ../../script/mkobj2.awk ./
 chmod 755 mkobj2.awk
 gawk -f mkobj2 voxel.xyz > voxel.obj
 ../mkobj2.awk < voxel.xyz > voxel.obj
