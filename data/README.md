@@ -6,7 +6,7 @@ There are 52 buildings, the value is the building number.
 There are two dtm's (you only need one). The one called dtm is the terrain like if there were no builidngs. The one called dtmbot is a terrain with holes, in which the buildings fit (buildings extend 3m under the terrain). So if you use dtm together with the buildings, some voxels will occur twice: in the terrain and in a building. It you use dtmbot, instead of dtm, all voxels will be unique: either terrain or building.
 
 ```
-cp ../script/ExpandAll ../script/Wcpipe ./build
+cp ../script/ExpandAll ../script/Wcpipe ../script/ExpandBld ./build
 cd build
 ./ExpandAll
 ```
