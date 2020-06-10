@@ -157,8 +157,12 @@ def create_db(user, password, dbname, tbname, host):
 		# else:
 			# cur.execute('CREATE TABLE IF NOT EXISTS'+ tbname + 
 			# 	' (voxid SERIAL PRIMARY KEY, x INTEGER NOT NULL, y INTEGER NOT NULL, z INTEGER NOT NULL, objNum INTEGER);')
+		"""
 		cur.execute('CREATE TABLE IF NOT EXISTS '+ tbname + 
 			' (voxid serial PRIMARY KEY, x INTEGER NOT NULL, y INTEGER NOT NULL, z INTEGER NOT NULL, objNum INTEGER, materialpath VARCHAR(100));')
+		"""
+		cur.execute('CREATE TABLE IF NOT EXISTS '+ tbname + 
+			' (voxid serial PRIMARY KEY, x INTEGER NOT NULL, y INTEGER NOT NULL, z INTEGER NOT NULL, classID INTEGER, buildID INTEGER NOT NULL);')
 		cur.close()
 		conn.commit()	# commit the changes		
 	except (Exception, psycopg2.DatabaseError) as error:
@@ -181,15 +185,22 @@ def write_db(conn, tbname, file):
 	if conn is not None:
 		try:
 			cur = conn.cursor()
+			"""
 			xyzset = set()		# store xyz in each line from raw data file
 			xMin, yMin, zMin = None, None, None
 			xMax, yMax, zMax = None, None, None
+			"""
 			with open(file, mode='r', encoding='utf-8') as f:
 				while(True):
 					line = f.readline().strip()
 					if not line:
 						break
-					x, y, z, objNum = int(line.split()[0]), int(line.split()[1]), int(line.split()[2]), int(line.split()[3])
+					x, y, z = int(line.split()[0]), int(line.split()[1]), int(line.split()[2])
+					classID, buildID = int(line.split()[3]), int(line.split()[4])
+					cur.execute("INSERT INTO " + tbname + 
+						" (x, y, z, classID, buildID) VALUES({0}, {1}, {2}, {3}, {4})".format(
+						int(x), int(y), int(z), int(classID), int(buildID)))
+					"""
 					xyzset.add(tuple(int(i) for i in line.split()))
 					if xMin is None:
 						xMin, yMin, zMin = x, y, z
@@ -226,6 +237,7 @@ def write_db(conn, tbname, file):
 				cur.execute("INSERT INTO " + tbname + 
 					" (x, y, z, objnum, materialpath) VALUES({0}, {1}, {2}, {3}, {4})".format(
 						int(xRaw), int(yRaw), int(zRaw), int(objNum), str(materialPath)))
+			"""
 			cur.close()
 			conn.commit()
 		except (Exception, psycopg2.DatabaseError) as error:
@@ -246,11 +258,9 @@ if __name__=='__main__':
 	parser.add_argument('--host', help='host address')
 	args = parser.parse_args(sys.argv[1:])
 
-	# ********** Creating Database **********
+	print('********** Creating Database **********')
 	conn = create_db(args.user, args.pwd, args.dbname, args.tbname, args.host)
 
-	# ********** Writing Database **********
+	print('********** Writing Database **********')
 	write_db(conn, args.tbname, args.input)
-
-
 
