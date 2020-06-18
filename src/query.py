@@ -9,7 +9,7 @@ Func:
 Usage:
 > python query.py --input=../exp/dat/ --buildID=3
 
-@date: 11 June, 2020
+@date: 16 June, 2020
 @author: Wesley
 
 """
@@ -21,7 +21,8 @@ import os
 import sys
 import argparse
 import pandas as pd
-# import feather
+import feather
+import pandas as pd
 from config import stopwatch
 import warnings
 warnings.filterwarnings('ignore')
@@ -39,81 +40,102 @@ dir_dict = {
 	6: 'SciThe'
 }
 
-def get_building_1(dir, buildID):
-	columns = ['x', 'y', 'z', 'objID']
-	df = pd.DataFrame(columns=columns)
-	dir = os.path.join(dir, 'building.xyz')
-	with open(dir, mode='r', encoding='utf-8') as f:
-		while(True):
-			line = f.readline().strip()
-			if not line:
-				break
-			if int(line.split()[4]) == int(buildID):
-				df.append({
-					'x': line.split()[0],
-					'y': line.split()[1],
-					'z': line.split()[2],
-					'objID': line.split()[3]
-				}, ignore_index=True)
 
-	return df
-
-def get_building_2(dir, buildID):
-	columns = ['x', 'y', 'z', 'objID']
-	df = pd.DataFrame(columns=columns)	
-	dir = os.path.join(dir, dir_dict[int(buildID)]+'.xyz')
-	with open(dir, mode='r', encoding='utf-8') as f:
-		while(True):
-			line = f.readline().strip()
-			if not line:
-				break
-			df.append({
-				'x': line.split()[0],
-				'y': line.split()[1],
-				'z': line.split()[2],
-				'objID': line.split()[3]
-			}, ignore_index=True)
-
-	return df
-
-def get_building_3(dir, buildID):
+def get_build_unfragmented(dir, buildID):
 	columns = ['x', 'y', 'z', 'objID', 'buildID']
-	dir = os.path.join(dir, 'building.xyz')	
+	dir = os.path.join(dir, 'building.feather')	
 	df = pd.read_feather(dir, columns=columns)
-	result = df.loc[df['buildID']==buildID]
-	return result
+	df_build = df.loc[df['buildID']==int(buildID)]
+	return df_build, len(df_build)
 
-def get_building_4(dir, buildID):
+
+def get_build_fragmented(dir, buildID):
 	columns = ['x', 'y', 'z', 'objID']
-	dir = os.path.join(dir, dir_dict[int(buildID)]+'.xyz')
+	dir = os.path.join(dir, dir_dict[int(buildID)]+'.feather')
+	df_build = pd.read_feather(dir, columns=columns)
+	return df_build, len(df_build)
+
+
+def get_object(dir, buildID, objID):
+	columns = ['x', 'y', 'z', 'objID']
+	dir = os.path.join(dir, dir_dict[int(buildID)]+'.feather')
 	df = pd.read_feather(dir, columns=columns)
-	return df
+	df_obj = df.loc[df['objID']==int(objID)]
+	return df_obj, len(df_obj)
+
+
+def get_rectangular(dir, buildID, xmin, xmax, ymin, ymax):
+	restrict_x = ' x >= ' + repr(xmin) + ' & ' + ' x <= ' + repr(xmax)
+	restrict_y = ' y >= ' + repr(ymin) + ' & ' + ' y <= ' + repr(ymax)
+	restrict = restrict_x + ' & ' + restrict_y
+
+	columns = ['x', 'y', 'z', 'objID']
+	dir = os.path.join(dir, dir_dict[int(buildID)]+'.feather')
+	df = pd.read_feather(dir, columns=columns)
+
+	df_rec = df.query(restrict)
+	return df_rec, len(df_rec)
+
+
+def get_radial(dir, buildID, x, y, radius):
+	xmin = x - radius
+	xmax = x + radius
+	ymin = y - radius
+	ymax = y + radius
+	restrict_x = ' x >= ' + repr(xmin) + ' & ' + ' x <= ' + repr(xmax)
+	restrict_y = ' y >= ' + repr(ymin) + ' & ' + ' y <= ' + repr(ymax)
+	restrict_pow = '(' + ' (x - ' + repr(x) + ')**2' + ' + ' + ' (y - ' + repr(y) + ')**2' + ') < ' + '(' + repr(radius**2) + ')'
+
+	restrict = restrict_x + ' & ' + restrict_y + ' & ' + restrict_pow
+
+	columns = ['x', 'y', 'z', 'objID']
+	dir = os.path.join(dir, dir_dict[int(buildID)]+'.feather')
+	df = pd.read_feather(dir, columns=columns)
+
+	df_rec = df.query(restrict)
+	return df_rec, len(df_rec)
 
 
 if __name__=='__main__':
 	print('********** Initializing ArgumentParser and related arguments **********')
-	parser = argparse.ArgumentParser(description='Argument list', formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+	parser = argparse.ArgumentParser(description='Argument list', 
+		formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 	parser.add_argument('--input', help='directory for input data')
 	parser.add_argument('--buildID', help='building ID')
+	parser.add_argument('--objID', help='object ID')
+	parser.add_argument('--xmin', help='min x')
+	parser.add_argument('--xmax', help='max x')
+	parser.add_argument('--ymin', help='min y')
+	parser.add_argument('--ymax', help='max y')
+	parser.add_argument('--x', help='x')
+	parser.add_argument('--y', help='y')
+	parser.add_argument('--r', help='radius')
 	args = parser.parse_args(sys.argv[1:])
 	if os.path.exists(args.input):
 		print('Input file exists')
 
-	print('********** Retrieving all voxels in a given building semantic class **********')
-	
-	# message4 = 'Loading "{}" voxels in seperate file through feather library'.format(dir_dict[int(args.buildID)])
-	# with stopwatch(message4):
-	# 	df = get_building_4(args.input, args.buildID)
-
-	message2 = 'Loading "{}" voxels in seperate file through row scanning'.format(dir_dict[int(args.buildID)])
-	with stopwatch(message2):
-		get_building_2(args.input, args.buildID)
-
-	# message3 = 'Loading "{}" voxels in integrared file through feather library'.format(dir_dict[int(args.buildID)])
-	# with stopwatch(message3):
-	# 	get_building_3(args.input, args.buildID)
-
-	message1 = 'Loading "{}" voxels in integrared file through row scanning'.format(dir_dict[int(args.buildID)])
+	print('********** Q1: Retrieving all voxels in a given building semantic class **********')
+	message1 = 'Loading "{}" voxels in unfragmented file'.format(dir_dict[int(args.buildID)])
 	with stopwatch(message1):
-		get_building_1(args.input, args.buildID)
+		get_build_unfragmented(args.input, args.buildID)
 
+	message2 = 'Loading "{}" voxels in fragmented file'.format(dir_dict[int(args.buildID)])
+	with stopwatch(message2):
+		get_build_fragmented(args.input, args.buildID)
+
+	print('********** Q2: Retrieving all voxels refer to a given IFC class **********')
+	message3 = 'Loading "{}" voxels in {} building'.format(int(args.objID), dir_dict[int(args.buildID)])
+	with stopwatch(message3):
+		get_object(args.input, args.buildID, args.objID)
+
+	print('********** Q3: Retrieving all voxels in a given building semantic class **********')
+	message4 = 'Loading "{}" voxels in range [{}, {}] and [{}, {}]'.format(
+		dir_dict[int(args.buildID)], int(args.xmin), int(args.xmax), int(args.ymin), int(args.ymax))
+	with stopwatch(message4):
+		get_rectangular(args.input, args.buildID, int(args.xmin), int(args.xmax), int(args.ymin), int(args.ymax))
+
+	print('********** Q4: Retrieving all voxels in a given building semantic class **********')
+	message5 = 'Loading "{}" voxels centered at ({}, {}) with radius={}'.format(
+		dir_dict[int(args.buildID)], int(args.x), int(args.y), float(args.r))
+	with stopwatch(message5):
+		get_radial(args.input, args.buildID, int(args.x), int(args.y), float(args.r))
