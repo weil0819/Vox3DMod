@@ -162,7 +162,7 @@ def create_db(user, password, dbname, tbname, host):
 			' (voxid serial PRIMARY KEY, x INTEGER NOT NULL, y INTEGER NOT NULL, z INTEGER NOT NULL, objNum INTEGER, materialpath VARCHAR(100));')
 		"""
 		cur.execute('CREATE TABLE IF NOT EXISTS '+ tbname + 
-			' (voxid serial PRIMARY KEY, x INTEGER NOT NULL, y INTEGER NOT NULL, z INTEGER NOT NULL, classID INTEGER, buildID INTEGER NOT NULL);')
+			' (voxid serial PRIMARY KEY, x INTEGER NOT NULL, y INTEGER NOT NULL, z INTEGER NOT NULL, classID INTEGER);')
 		cur.close()
 		conn.commit()	# commit the changes		
 	except (Exception, psycopg2.DatabaseError) as error:
@@ -196,10 +196,11 @@ def write_db(conn, tbname, file):
 					if not line:
 						break
 					x, y, z = int(line.split()[0]), int(line.split()[1]), int(line.split()[2])
-					classID, buildID = int(line.split()[3]), int(line.split()[4])
+					# classID, buildID = int(line.split()[3]), int(line.split()[4])
+					classID = int(line.split()[3])
 					cur.execute("INSERT INTO " + tbname + 
-						" (x, y, z, classID, buildID) VALUES({0}, {1}, {2}, {3}, {4})".format(
-						int(x), int(y), int(z), int(classID), int(buildID)))
+						" (x, y, z, classID) VALUES({0}, {1}, {2}, {3})".format(
+						int(x), int(y), int(z), int(classID)))
 					"""
 					xyzset.add(tuple(int(i) for i in line.split()))
 					if xMin is None:
