@@ -15,6 +15,7 @@ from __future__ import division
 import os
 import sys
 import argparse
+import pandas as pd
 from config import stopwatch
 import warnings
 warnings.filterwarnings('ignore')
@@ -25,7 +26,8 @@ print('Python Version: ', python_version())
 
 build_list = ['BE', 'BlockHouse', 'Dalton', 'Quadrangle', 'Roundhouse', 'SciThe']
 ID = 1
-
+frames = []
+columns = ['x', 'y', 'z', 'objID']
 
 if __name__=='__main__':
 	print('********** Initializing ArgumentParser and related arguments **********')
@@ -38,14 +40,20 @@ if __name__=='__main__':
 
 	print('********** Reading and Writing .xyz file **********')
 	for build in build_list:
-		filename = args.input+str(build)+'.xyz'
+		filename = os.path.join(args.input, build, 'classmodel.xyz')
 		message = 'Opening "{}"'.format(filename)
 		with stopwatch(message):
-			with open(filename, mode='r', encoding='utf-8') as reader:
-				while(True):
-					line = reader.readline().strip()
-					if not line:
-						break
-					with open(args.output, mode='a+', encoding='utf-8') as writer:
-						writer.write(line + ' ' + str(ID) + '\n')
+			# with open(filename, mode='r', encoding='utf-8') as reader:
+			# 	while(True):
+			# 		line = reader.readline().strip()
+			# 		if not line:
+			# 			break
+			# 		with open(args.output, mode='a+', encoding='utf-8') as writer:
+			# 			writer.write(line + ' ' + str(ID) + '\n')
+			df = pd.read_csv(filename, sep=' ', names=columns)
+			df['buildID'] = ID
+			frames.append(df)
 		ID = ID + 1
+
+	result = pd.concat(frames)
+	result.to_csv(args.output, sep=' ', header=False, index=False)

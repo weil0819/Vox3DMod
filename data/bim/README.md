@@ -18,9 +18,9 @@ cat <file> | wc -l
 - pol2class.awk file
 > Transfer 'objNum' to 'classNum', that is, we just consider which class the voxel belong to.
 ```
-cp ../../script/pol2class.awk ./
-chmod 755 pol2class.awk
-../pol2class.awk < polmodel.xyz > classmodel.xyz
+cp ../../script/pol2class ./
+chmod 755 pol2class
+../pol2class < polmodel.xyz > classmodel.xyz
 ```
 
 - ALLCLASS file

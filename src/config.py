@@ -1,6 +1,9 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+import contextlib
+import time
+
 @contextlib.contextmanager
 def stopwatch(message):
     

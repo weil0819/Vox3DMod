@@ -2,12 +2,15 @@
 # -*- coding: utf-8 -*-
 
 """
-Making an .obj file from a voxel.xyz.
+Making an .feather file from a voxel.xyz.
 
 Usage:
-> python xyz2obj.py --input='YOUR INPUT DATA PATH' --output='YOUR OUTPUT DATA PATH'
+> python xyz2feather.py --input=YOUR INPUT DATA PATH --output=YOUR OUTPUT DATA PATH
 E.g.,
-> python xyz2obj.py --input='../data/bim/Dalton/classmodel.xyz' --output='../data/bim/Dalton/classmodel.obj'
+> python xyz2feather.py --input=../data/bim/Dalton/classmodel.xyz --output=../data/bim/Dalton/classmodel.feather
+
+Intall:
+> conda install pyarrow=0.17.* -c conda-forge
 
 @date: 11 June, 2020
 @author: Wesley
@@ -30,7 +33,6 @@ from platform import python_version
 
 print('Python Version: ', python_version())
 
-
 if __name__=='__main__':
 	print('********** Initializing ArgumentParser and related arguments **********')
 	parser = argparse.ArgumentParser(description='Input and output data path', 
@@ -42,10 +44,10 @@ if __name__=='__main__':
 		print('Input file exists')
 
 	print('********** Opening .xyz file **********')
-	columns = ['x', 'y', 'z', 'objID']
+	columns = ['x', 'y', 'z', 'objID', 'buildID']
 	message = 'Opening "{}"'.format(args.input)	# output message
 	with stopwatch(message):
-		df = pd.read_csv(args.input, columns=columns)
+		df = pd.read_csv(args.input, sep=' ', names=columns)
 
 	print('********** Writing .feather file **********')
 	message = 'Writing "{}"'.format(args.output)
