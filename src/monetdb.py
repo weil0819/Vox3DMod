@@ -64,6 +64,8 @@ def write_db(conn, tbname, file):
 	if conn is not None:
 		try:
 			cur = conn.cursor()
+			# Method-I: Read .xyz file line by line
+			'''
 			with open(file, mode='r', encoding='utf-8') as f:
 				while(True):
 					line = f.readline().strip()
@@ -74,6 +76,10 @@ def write_db(conn, tbname, file):
 					cur.execute("INSERT INTO " + tbname + 
 						" (x, y, z, objID) VALUES({0}, {1}, {2}, {3})".format(
 							int(x), int(y), int(z), int(objID)))
+			'''
+			# Method-II: COPY -- copy data between a file and a table
+			cur.execute("COPY INTO " + tbname + "(x, y, z, objID) FROM '" + file + "'(x,y,z,objID) DELIMITERS ' ';")
+
 			cur.close()
 			conn.commit()
 		except (Exception, pymonetdb.exceptions.DatabaseError) as error:

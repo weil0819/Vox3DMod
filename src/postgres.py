@@ -162,7 +162,7 @@ def create_db(user, password, dbname, tbname, host):
 			' (voxid serial PRIMARY KEY, x INTEGER NOT NULL, y INTEGER NOT NULL, z INTEGER NOT NULL, objNum INTEGER, materialpath VARCHAR(100));')
 		"""
 		cur.execute('CREATE TABLE IF NOT EXISTS '+ tbname + 
-			' (voxid serial PRIMARY KEY, x INTEGER NOT NULL, y INTEGER NOT NULL, z INTEGER NOT NULL, classID INTEGER);')
+			' (voxid serial PRIMARY KEY, x INTEGER NOT NULL, y INTEGER NOT NULL, z INTEGER NOT NULL, objID INTEGER);')
 		cur.close()
 		conn.commit()	# commit the changes		
 	except (Exception, psycopg2.DatabaseError) as error:
@@ -190,17 +190,23 @@ def write_db(conn, tbname, file):
 			xMin, yMin, zMin = None, None, None
 			xMax, yMax, zMax = None, None, None
 			"""
+			# Method-I: Read .xyz file line by line
+			'''
 			with open(file, mode='r', encoding='utf-8') as f:
 				while(True):
 					line = f.readline().strip()
 					if not line:
 						break
 					x, y, z = int(line.split()[0]), int(line.split()[1]), int(line.split()[2])
-					# classID, buildID = int(line.split()[3]), int(line.split()[4])
-					classID = int(line.split()[3])
+					# objID, buildID = int(line.split()[3]), int(line.split()[4])
+					objID = int(line.split()[3])
 					cur.execute("INSERT INTO " + tbname + 
-						" (x, y, z, classID) VALUES({0}, {1}, {2}, {3})".format(
-						int(x), int(y), int(z), int(classID)))
+						" (x, y, z, objID) VALUES({0}, {1}, {2}, {3})".format(
+						int(x), int(y), int(z), int(objID)))
+			'''
+			# Method-II: COPY -- copy data between a file and a table
+			cur.execute("\COPY " + tbname + "(x, y, z, objID) FROM '" + file + "' DELIMITER ' ';")
+
 					"""
 					xyzset.add(tuple(int(i) for i in line.split()))
 					if xMin is None:
