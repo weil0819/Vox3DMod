@@ -1,6 +1,7 @@
 /* ---------------------------------------------------- */
 /*  Created On : 26-June-2020 	             			*/
 /*  DBMS       : PostgreSQL 			     			*/
+/*  Output     : voxeldb=# \o C:/postgres_result.sql    */
 /*  Usage      : voxeldb=# \i C:/postgres_query.sql     */
 /*  Author     : Wesley      			     			*/
 /* ---------------------------------------------------- */

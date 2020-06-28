@@ -98,16 +98,6 @@ DROP INDEX idx_scithe;
 DROP INDEX idx_building;
 
 
-/* Create Index */
-CREATE INDEX idx_be ON be(x, y, z);
-CREATE INDEX idx_blockhouse ON blockhouse(x, y, z);
-CREATE INDEX idx_dalton ON dalton(x, y, z);
-CREATE INDEX idx_quadrangle ON quadrangle(x, y, z);
-CREATE INDEX idx_roundhouse ON roundhouse(x, y, z);
-CREATE INDEX idx_scithe ON scithe(x, y, z);
-CREATE INDEX idx_building ON building(x, y, z);
-
-
 /* Import Data */
 COPY INTO be(x, y, z, objID) FROM 'C:/Users/z5039792/Documents/Vox3DMod/data/bim/BE/classmodel.xyz'(x,y,z,objID) DELIMITERS ' ';
 COPY INTO blockhouse(x, y, z, objID) FROM 'C:/Users/z5039792/Documents/Vox3DMod/data/bim/BlockHouse/classmodel.xyz'(x,y,z,objID) DELIMITERS ' ';
@@ -116,3 +106,13 @@ COPY INTO quadrangle(x, y, z, objID) FROM 'C:/Users/z5039792/Documents/Vox3DMod/
 COPY INTO roundhouse(x, y, z, objID) FROM 'C:/Users/z5039792/Documents/Vox3DMod/data/bim/Roundhouse/classmodel.xyz'(x,y,z,objID) DELIMITERS ' ';
 COPY INTO scithe(x, y, z, objID) FROM 'C:/Users/z5039792/Documents/Vox3DMod/data/bim/SciThe/classmodel.xyz'(x,y,z,objID) DELIMITERS ' ';
 COPY INTO building(x, y, z, objID, buildID) FROM 'C:/Users/z5039792/Documents/Vox3DMod/data/bim/building.xyz'(x,y,z,objID,buildID) DELIMITERS ' ';
+
+
+/* Create Index */
+CREATE INDEX idx_be ON be(x, y, z);
+CREATE INDEX idx_blockhouse ON blockhouse(x, y, z);
+CREATE INDEX idx_dalton ON dalton(x, y, z);
+CREATE INDEX idx_quadrangle ON quadrangle(x, y, z);
+CREATE INDEX idx_roundhouse ON roundhouse(x, y, z);
+CREATE INDEX idx_scithe ON scithe(x, y, z);
+CREATE INDEX idx_building ON building(x, y, z);

@@ -1,12 +1,13 @@
 /* ---------------------------------------------------- */
 /*  Created On : 26-June-2020 	             			*/
 /*  DBMS       : PostgreSQL 			     			*/
+/*  Output     : voxeldb=# \o C:/postgres_result.sql    */
 /*  Usage      : voxeldb=# \i C:/postgres_dump.sql      */
 /*  Author     : Wesley      			     			*/
 /* ---------------------------------------------------- */
 
 /* Add PostGIS Extension */
-CREATE EXTENSION IF NOT EXISTS POSTGIS;
+-- CREATE EXTENSION IF NOT EXISTS POSTGIS;
 
 
 /* Drop Tables */
@@ -87,7 +88,7 @@ CREATE TABLE building
 	y INTEGER NOT NULL,
 	z INTEGER NOT NULL,
 	objID INTEGER,
-	buildID INTEGER
+	buildID INTEGER NOT NULL
 );
 
 
@@ -99,18 +100,7 @@ DROP INDEX IF EXISTS idx_quadrangle CASCADE;
 DROP INDEX IF EXISTS idx_roundhouse CASCADE;
 DROP INDEX IF EXISTS idx_scithe CASCADE;
 DROP INDEX IF EXISTS idx_building CASCADE;
-DROP INDEX IF EXISTS idx_building_ID CASCADE;
-
-
-/* Create Index */
-CREATE INDEX idx_be ON be(x, y, z);
-CREATE INDEX idx_blockhouse ON blockhouse(x, y, z);
-CREATE INDEX idx_dalton ON dalton(x, y, z);
-CREATE INDEX idx_quadrangle ON quadrangle(x, y, z);
-CREATE INDEX idx_roundhouse ON roundhouse(x, y, z);
-CREATE INDEX idx_scithe ON scithe(x, y, z);
-CREATE INDEX idx_building ON building(x, y, z);
-CREATE INDEX idx_building_ID ON building USING hash (buildID);
+-- DROP INDEX IF EXISTS idx_building_ID CASCADE;
 
 
 /* Import Data */
@@ -121,3 +111,15 @@ CREATE INDEX idx_building_ID ON building USING hash (buildID);
 \COPY roundhouse(x, y, z, objID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\bim\Roundhouse\classmodel.xyz' DELIMITER ' ';
 \COPY scithe(x, y, z, objID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\bim\SciThe\classmodel.xyz' DELIMITER ' ';
 \COPY building(x, y, z, objID, buildID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\bim\building.xyz' DELIMITER ' ';
+
+
+/* Create Index */
+CREATE INDEX idx_be ON be(x, y, z);
+CREATE INDEX idx_blockhouse ON blockhouse(x, y, z);
+CREATE INDEX idx_dalton ON dalton(x, y, z);
+CREATE INDEX idx_quadrangle ON quadrangle(x, y, z);
+CREATE INDEX idx_roundhouse ON roundhouse(x, y, z);
+CREATE INDEX idx_scithe ON scithe(x, y, z);
+CREATE INDEX idx_building ON building(x, y, z, buildID);
+-- CREATE INDEX idx_building_ID ON building USING hash (buildID);
+
