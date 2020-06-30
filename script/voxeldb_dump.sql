@@ -29,7 +29,8 @@ CREATE TABLE be
 	x INTEGER NOT NULL,
 	y INTEGER NOT NULL,
 	z INTEGER NOT NULL,
-	objID INTEGER
+	objID INTEGER,
+	octPath VARCHAR
 );
 
 
@@ -39,7 +40,8 @@ CREATE TABLE blockhouse
 	x INTEGER NOT NULL,
 	y INTEGER NOT NULL,
 	z INTEGER NOT NULL,
-	objID INTEGER
+	objID INTEGER,
+	octPath VARCHAR
 );
 
 
@@ -49,7 +51,8 @@ CREATE TABLE dalton
 	x INTEGER NOT NULL,
 	y INTEGER NOT NULL,
 	z INTEGER NOT NULL,
-	objID INTEGER
+	objID INTEGER,
+	octPath VARCHAR
 );
 
 
@@ -59,7 +62,8 @@ CREATE TABLE quadrangle
 	x INTEGER NOT NULL,
 	y INTEGER NOT NULL,
 	z INTEGER NOT NULL,
-	objID INTEGER
+	objID INTEGER,
+	octPath VARCHAR
 );
 
 
@@ -69,7 +73,8 @@ CREATE TABLE roundhouse
 	x INTEGER NOT NULL,
 	y INTEGER NOT NULL,
 	z INTEGER NOT NULL,
-	objID INTEGER
+	objID INTEGER,
+	octPath VARCHAR
 );
 
 
@@ -79,7 +84,8 @@ CREATE TABLE scithe
 	x INTEGER NOT NULL,
 	y INTEGER NOT NULL,
 	z INTEGER NOT NULL,
-	objID INTEGER
+	objID INTEGER,
+	octPath VARCHAR
 );
 
 
@@ -96,7 +102,8 @@ CREATE TABLE tree
 	x INTEGER NOT NULL,
 	y INTEGER NOT NULL,
 	z INTEGER NOT NULL,
-	objID INTEGER
+	objID INTEGER,
+	octPath VARCHAR
 );
 
 
@@ -106,7 +113,8 @@ CREATE TABLE dtm
 	x INTEGER NOT NULL,
 	y INTEGER NOT NULL,
 	z INTEGER NOT NULL,
-	objID INTEGER
+	objID INTEGER,
+	octPath VARCHAR
 );
 
 
@@ -116,7 +124,8 @@ CREATE TABLE dtmbot
 	x INTEGER NOT NULL,
 	y INTEGER NOT NULL,
 	z INTEGER NOT NULL,
-	objID INTEGER
+	objID INTEGER,
+	octPath VARCHAR
 );
 
 
@@ -126,7 +135,8 @@ CREATE TABLE build
 	x INTEGER NOT NULL,
 	y INTEGER NOT NULL,
 	z INTEGER NOT NULL,
-	buildID INTEGER
+	buildID INTEGER,
+	octPath VARCHAR
 );
 
 
@@ -145,68 +155,68 @@ DROP INDEX IF EXISTS idx_build CASCADE;
 
 
 /* Import Data */
-\COPY be(x, y, z, objID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\bim\BE\classmodel.xyz' DELIMITER ' ';
-\COPY blockhouse(x, y, z, objID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\bim\BlockHouse\classmodel.xyz' DELIMITER ' ';
-\COPY dalton(x, y, z, objID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\bim\Dalton\classmodel.xyz' DELIMITER ' ';
-\COPY quadrangle(x, y, z, objID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\bim\Quadrangle\classmodel.xyz' DELIMITER ' ';
-\COPY roundhouse(x, y, z, objID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\bim\Roundhouse\classmodel.xyz' DELIMITER ' ';
-\COPY scithe(x, y, z, objID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\bim\SciThe\classmodel.xyz' DELIMITER ' ';
+\COPY be(x, y, z, objID, octPath) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\bim\BE\classmodel.oct' DELIMITER ' ';
+\COPY blockhouse(x, y, z, objID, octPath) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\bim\BlockHouse\classmodel.oct' DELIMITER ' ';
+\COPY dalton(x, y, z, objID, octPath) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\bim\Dalton\classmodel.oct' DELIMITER ' ';
+\COPY quadrangle(x, y, z, objID, octPath) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\bim\Quadrangle\classmodel.oct' DELIMITER ' ';
+\COPY roundhouse(x, y, z, objID, octPath) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\bim\Roundhouse\classmodel.oct' DELIMITER ' ';
+\COPY scithe(x, y, z, objID, octPath) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\bim\SciThe\classmodel.oct' DELIMITER ' ';
 \COPY ifcobject(id, name) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\bim\ifcobject' DELIMITER ' ';
-\COPY tree(x, y, z, objID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\tree\tree.xyz' DELIMITER ' ';
-\COPY dtm(x, y, z, objID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\dtm\dtm.xyz' DELIMITER ' ';
-\COPY dtmbot(x, y, z, objID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\dtm\dtmbot.xyz' DELIMITER ' ';
-\COPY build(x, y, z, buildID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld1.xyz' DELIMITER ' ';
-\COPY build(x, y, z, buildID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld2.xyz' DELIMITER ' ';
-\COPY build(x, y, z, buildID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld3.xyz' DELIMITER ' ';
-\COPY build(x, y, z, buildID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld4.xyz' DELIMITER ' ';
-\COPY build(x, y, z, buildID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld5.xyz' DELIMITER ' ';
-\COPY build(x, y, z, buildID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld6.xyz' DELIMITER ' ';
-\COPY build(x, y, z, buildID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld7.xyz' DELIMITER ' ';
-\COPY build(x, y, z, buildID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld8.xyz' DELIMITER ' ';
-\COPY build(x, y, z, buildID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld9.xyz' DELIMITER ' ';
-\COPY build(x, y, z, buildID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld10.xyz' DELIMITER ' ';
-\COPY build(x, y, z, buildID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld11.xyz' DELIMITER ' ';
-\COPY build(x, y, z, buildID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld12.xyz' DELIMITER ' ';
-\COPY build(x, y, z, buildID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld13.xyz' DELIMITER ' ';
-\COPY build(x, y, z, buildID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld14.xyz' DELIMITER ' ';
-\COPY build(x, y, z, buildID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld15.xyz' DELIMITER ' ';
-\COPY build(x, y, z, buildID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld16.xyz' DELIMITER ' ';
-\COPY build(x, y, z, buildID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld17.xyz' DELIMITER ' ';
-\COPY build(x, y, z, buildID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld18.xyz' DELIMITER ' ';
-\COPY build(x, y, z, buildID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld19.xyz' DELIMITER ' ';
-\COPY build(x, y, z, buildID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld20.xyz' DELIMITER ' ';
-\COPY build(x, y, z, buildID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld21.xyz' DELIMITER ' ';
-\COPY build(x, y, z, buildID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld22.xyz' DELIMITER ' ';
-\COPY build(x, y, z, buildID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld23.xyz' DELIMITER ' ';
-\COPY build(x, y, z, buildID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld24.xyz' DELIMITER ' ';
-\COPY build(x, y, z, buildID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld25.xyz' DELIMITER ' ';
-\COPY build(x, y, z, buildID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld27.xyz' DELIMITER ' ';
-\COPY build(x, y, z, buildID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld28.xyz' DELIMITER ' ';
-\COPY build(x, y, z, buildID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld29.xyz' DELIMITER ' ';
-\COPY build(x, y, z, buildID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld30.xyz' DELIMITER ' ';
-\COPY build(x, y, z, buildID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld31.xyz' DELIMITER ' ';
-\COPY build(x, y, z, buildID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld32.xyz' DELIMITER ' ';
-\COPY build(x, y, z, buildID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld33.xyz' DELIMITER ' ';
-\COPY build(x, y, z, buildID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld34.xyz' DELIMITER ' ';
-\COPY build(x, y, z, buildID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld35.xyz' DELIMITER ' ';
-\COPY build(x, y, z, buildID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld36.xyz' DELIMITER ' ';
-\COPY build(x, y, z, buildID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld37.xyz' DELIMITER ' ';
-\COPY build(x, y, z, buildID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld38.xyz' DELIMITER ' ';
-\COPY build(x, y, z, buildID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld39.xyz' DELIMITER ' ';
-\COPY build(x, y, z, buildID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld40.xyz' DELIMITER ' ';
-\COPY build(x, y, z, buildID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld41.xyz' DELIMITER ' ';
-\COPY build(x, y, z, buildID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld42.xyz' DELIMITER ' ';
-\COPY build(x, y, z, buildID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld43.xyz' DELIMITER ' ';
-\COPY build(x, y, z, buildID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld44.xyz' DELIMITER ' ';
-\COPY build(x, y, z, buildID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld45.xyz' DELIMITER ' ';
-\COPY build(x, y, z, buildID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld47.xyz' DELIMITER ' ';
-\COPY build(x, y, z, buildID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld48.xyz' DELIMITER ' ';
-\COPY build(x, y, z, buildID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld49.xyz' DELIMITER ' ';
-\COPY build(x, y, z, buildID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld50.xyz' DELIMITER ' ';
-\COPY build(x, y, z, buildID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld51.xyz' DELIMITER ' ';
-\COPY build(x, y, z, buildID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld52.xyz' DELIMITER ' ';
-\COPY build(x, y, z, buildID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld53.xyz' DELIMITER ' ';
-\COPY build(x, y, z, buildID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld54.xyz' DELIMITER ' ';
+\COPY tree(x, y, z, objID, octPath) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\tree\tree.oct' DELIMITER ' ';
+\COPY dtm(x, y, z, objID, octPath) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\dtm\dtm.oct' DELIMITER ' ';
+\COPY dtmbot(x, y, z, objID, octPath) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\dtm\dtmbot.oct' DELIMITER ' ';
+\COPY build(x, y, z, buildID, octPath) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld1.oct' DELIMITER ' ';
+\COPY build(x, y, z, buildID, octPath) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld2.oct' DELIMITER ' ';
+\COPY build(x, y, z, buildID, octPath) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld3.oct' DELIMITER ' ';
+\COPY build(x, y, z, buildID, octPath) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld4.oct' DELIMITER ' ';
+\COPY build(x, y, z, buildID, octPath) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld5.oct' DELIMITER ' ';
+\COPY build(x, y, z, buildID, octPath) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld6.oct' DELIMITER ' ';
+\COPY build(x, y, z, buildID, octPath) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld7.oct' DELIMITER ' ';
+\COPY build(x, y, z, buildID, octPath) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld8.oct' DELIMITER ' ';
+\COPY build(x, y, z, buildID, octPath) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld9.oct' DELIMITER ' ';
+\COPY build(x, y, z, buildID, octPath) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld10.oct' DELIMITER ' ';
+\COPY build(x, y, z, buildID, octPath) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld11.oct' DELIMITER ' ';
+\COPY build(x, y, z, buildID, octPath) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld12.oct' DELIMITER ' ';
+\COPY build(x, y, z, buildID, octPath) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld13.oct' DELIMITER ' ';
+\COPY build(x, y, z, buildID, octPath) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld14.oct' DELIMITER ' ';
+\COPY build(x, y, z, buildID, octPath) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld15.oct' DELIMITER ' ';
+\COPY build(x, y, z, buildID, octPath) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld16.oct' DELIMITER ' ';
+\COPY build(x, y, z, buildID, octPath) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld17.oct' DELIMITER ' ';
+\COPY build(x, y, z, buildID, octPath) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld18.oct' DELIMITER ' ';
+\COPY build(x, y, z, buildID, octPath) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld19.oct' DELIMITER ' ';
+\COPY build(x, y, z, buildID, octPath) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld20.oct' DELIMITER ' ';
+\COPY build(x, y, z, buildID, octPath) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld21.oct' DELIMITER ' ';
+\COPY build(x, y, z, buildID, octPath) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld22.oct' DELIMITER ' ';
+\COPY build(x, y, z, buildID, octPath) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld23.oct' DELIMITER ' ';
+\COPY build(x, y, z, buildID, octPath) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld24.oct' DELIMITER ' ';
+\COPY build(x, y, z, buildID, octPath) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld25.oct' DELIMITER ' ';
+\COPY build(x, y, z, buildID, octPath) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld27.oct' DELIMITER ' ';
+\COPY build(x, y, z, buildID, octPath) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld28.oct' DELIMITER ' ';
+\COPY build(x, y, z, buildID, octPath) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld29.oct' DELIMITER ' ';
+\COPY build(x, y, z, buildID, octPath) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld30.oct' DELIMITER ' ';
+\COPY build(x, y, z, buildID, octPath) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld31.oct' DELIMITER ' ';
+\COPY build(x, y, z, buildID, octPath) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld32.oct' DELIMITER ' ';
+\COPY build(x, y, z, buildID, octPath) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld33.oct' DELIMITER ' ';
+\COPY build(x, y, z, buildID, octPath) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld34.oct' DELIMITER ' ';
+\COPY build(x, y, z, buildID, octPath) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld35.oct' DELIMITER ' ';
+\COPY build(x, y, z, buildID, octPath) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld36.oct' DELIMITER ' ';
+\COPY build(x, y, z, buildID, octPath) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld37.oct' DELIMITER ' ';
+\COPY build(x, y, z, buildID, octPath) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld38.oct' DELIMITER ' ';
+\COPY build(x, y, z, buildID, octPath) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld39.oct' DELIMITER ' ';
+\COPY build(x, y, z, buildID, octPath) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld40.oct' DELIMITER ' ';
+\COPY build(x, y, z, buildID, octPath) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld41.oct' DELIMITER ' ';
+\COPY build(x, y, z, buildID, octPath) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld42.oct' DELIMITER ' ';
+\COPY build(x, y, z, buildID, octPath) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld43.oct' DELIMITER ' ';
+\COPY build(x, y, z, buildID, octPath) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld44.oct' DELIMITER ' ';
+\COPY build(x, y, z, buildID, octPath) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld45.oct' DELIMITER ' ';
+\COPY build(x, y, z, buildID, octPath) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld47.oct' DELIMITER ' ';
+\COPY build(x, y, z, buildID, octPath) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld48.oct' DELIMITER ' ';
+\COPY build(x, y, z, buildID, octPath) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld49.oct' DELIMITER ' ';
+\COPY build(x, y, z, buildID, octPath) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld50.oct' DELIMITER ' ';
+\COPY build(x, y, z, buildID, octPath) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld51.oct' DELIMITER ' ';
+\COPY build(x, y, z, buildID, octPath) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld52.oct' DELIMITER ' ';
+\COPY build(x, y, z, buildID, octPath) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld53.oct' DELIMITER ' ';
+\COPY build(x, y, z, buildID, octPath) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld54.oct' DELIMITER ' ';
 
 
 /* Create Index */

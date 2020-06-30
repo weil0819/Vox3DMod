@@ -25,6 +25,9 @@ import os
 import sys
 import argparse
 import psycopg2
+import csv
+from config import config
+from io import StringIO
 import warnings
 warnings.filterwarnings('ignore')
 
@@ -109,7 +112,7 @@ def translation_and_scaling(xMin, xMax, yMin, yMax, zMin, zMax, depth):
 	return translateX, translateY, translateZ, scale
 
 
-def create_db(user, password, dbname, tbname, host):
+def create_db(user, password, dbname, tbname, host, port):
 	'''
 	:function:
 		- Create a database and tables 
@@ -128,41 +131,43 @@ def create_db(user, password, dbname, tbname, host):
 	'''
 	conn = None
 	try:
+		# read connection parameters
+		# params = config()
 		print('Connecting to the PostgreSQL database ...')
-		conn = psycopg2.connect(host=host, user=user, password=password)
+		# conn = psycopg2.connect(host=host, user=user, password=password, port=port)
+		# conn.set_isolation_level(psycopg2.extensions.ISOLATION_LEVEL_AUTOCOMMIT)
+		# cur = conn.cursor()
+
+		# print('PostgreSQL database version:')		# execute a statement
+		# cur.execute('SELECT version();')
+		# db_version = cur.fetchone()					# display the PostgreSQL database server version
+		# print(db_version)
+
+		# cur.execute('SELECT datname FROM pg_database;')
+		# list_database = cur.fetchall()
+		# if (dbname,) in list_database:
+		# 	print('{} Database already exists ...'.format(dbname))
+		# else:
+		# 	cur.execute('CREATE DATABASE ' + dbname + ';')
+		# cur.close()
+		# conn.close()
+
+		conn = psycopg2.connect(host=host, database=dbname, user=user, password=password, port=port)
+		# conn = psycopg2.connect(**params)
 		conn.set_isolation_level(psycopg2.extensions.ISOLATION_LEVEL_AUTOCOMMIT)
 		cur = conn.cursor()
-
-		print('PostgreSQL database version:')		# execute a statement
-		cur.execute('SELECT version();')
-		db_version = cur.fetchone()					# display the PostgreSQL database server version
-		print(db_version)
-
-		cur.execute('SELECT datname FROM pg_database;')
-		list_database = cur.fetchall()
-		if (dbname,) in list_database:
-			print('{} Database already exists ...'.format(dbname))
-		else:
-			cur.execute('CREATE DATABASE ' + dbname + ';')
-		cur.close()
-		conn.close()
-
-		conn = psycopg2.connect(host=host, database=dbname, user=user, password=password)
-		cur = conn.cursor()
-		cur.execute('CREATE EXTENSION IF NOT EXISTS POSTGIS;')
+		# cur.execute('CREATE EXTENSION IF NOT EXISTS POSTGIS;')
 		# cur.execute("select exists(select relname from pg_class where relname='" + tbname + "');")
 		# tb_exist = cur.fetchone()[0]
 		# if tb_exist:
 		# 	print('{} table already exists ...'.format(tbname))
 		# else:
 			# cur.execute('CREATE TABLE IF NOT EXISTS'+ tbname + 
-			# 	' (voxid SERIAL PRIMARY KEY, x INTEGER NOT NULL, y INTEGER NOT NULL, z INTEGER NOT NULL, objNum INTEGER);')
-		"""
+			# 	' (voxid SERIAL PRIMARY KEY, x INTEGER NOT NULL, y INTEGER NOT NULL, z INTEGER NOT NULL, objID INTEGER);')
 		cur.execute('CREATE TABLE IF NOT EXISTS '+ tbname + 
-			' (voxid serial PRIMARY KEY, x INTEGER NOT NULL, y INTEGER NOT NULL, z INTEGER NOT NULL, objNum INTEGER, materialpath VARCHAR(100));')
-		"""
-		cur.execute('CREATE TABLE IF NOT EXISTS '+ tbname + 
-			' (voxid serial PRIMARY KEY, x INTEGER NOT NULL, y INTEGER NOT NULL, z INTEGER NOT NULL, objID INTEGER);')
+			' (voxid serial PRIMARY KEY, x INTEGER NOT NULL, y INTEGER NOT NULL, z INTEGER NOT NULL, objID INTEGER, octPath VARCHAR);')
+		# cur.execute('CREATE TABLE IF NOT EXISTS '+ tbname + 
+		# 	' (voxid serial PRIMARY KEY, x INTEGER NOT NULL, y INTEGER NOT NULL, z INTEGER NOT NULL, objID INTEGER);')
 		cur.close()
 		conn.commit()	# commit the changes		
 	except (Exception, psycopg2.DatabaseError) as error:
@@ -181,17 +186,20 @@ def write_db(conn, tbname, file):
 		- The table name
 	:param file:
 		- The input file
-	'''
+	'''	
 	if conn is not None:
 		try:
 			cur = conn.cursor()
-			"""
+
+			# Method-I: COPY -- copy data between a file and a table
+			# cur.execute("\COPY " + tbname + "(x, y, z, objID) FROM '" + file + "' DELIMITER ' ';")
+
+			# Method-II: Read .xyz file line by line
 			xyzset = set()		# store xyz in each line from raw data file
+			# xyzlist = []
 			xMin, yMin, zMin = None, None, None
 			xMax, yMax, zMax = None, None, None
-			"""
-			# Method-I: Read .xyz file line by line
-			'''
+			
 			with open(file, mode='r', encoding='utf-8') as f:
 				while(True):
 					line = f.readline().strip()
@@ -200,15 +208,10 @@ def write_db(conn, tbname, file):
 					x, y, z = int(line.split()[0]), int(line.split()[1]), int(line.split()[2])
 					# objID, buildID = int(line.split()[3]), int(line.split()[4])
 					objID = int(line.split()[3])
-					cur.execute("INSERT INTO " + tbname + 
-						" (x, y, z, objID) VALUES({0}, {1}, {2}, {3})".format(
-						int(x), int(y), int(z), int(objID)))
-			'''
-			# Method-II: COPY -- copy data between a file and a table
-			cur.execute("\COPY " + tbname + "(x, y, z, objID) FROM '" + file + "' DELIMITER ' ';")
-
-					"""
+					# cur.execute("INSERT INTO " + tbname + 
+					# 	" (x, y, z, objID) VALUES({0}, {1}, {2}, {3})".format(int(x), int(y), int(z), int(objID)))
 					xyzset.add(tuple(int(i) for i in line.split()))
+					# xyzlist.append([x,y,z,objID])
 					if xMin is None:
 						xMin, yMin, zMin = x, y, z
 						xMax, yMax, zMax = x, y, z
@@ -227,31 +230,113 @@ def write_db(conn, tbname, file):
 
 			depth = 8
 			translateX, translateY, translateZ, scale = translation_and_scaling(xMin, xMax, yMin, yMax, zMin, zMax, depth)
+			idx = 0
+			stringVoxels =  StringIO()
+			w = csv.writer(stringVoxels)
+			data = []
+
 			for line in xyzset:
 				xRaw, yRaw, zRaw = line[0], line[1], line[2]
-				objNum = line[3]
+				objID = line[3]
 				# Scaling coordinates.
 				x = (xRaw + translateX) * scale
 				y = (yRaw + translateY) * scale
 				z = (zRaw + translateZ) * scale
-
 				# Snap point to leaf node by converting float to integer and truncate towards 0.
 				leafNode = (int(x), int(y), int(z))
-
 				# Retrieve material path from box.
-				materialPath = get_material_path(depth, leafNode[0], leafNode[1], leafNode[2])
+				octPath = get_material_path(depth, leafNode[0], leafNode[1], leafNode[2])
 
-				cur.execute("INSERT INTO " + tbname + 
-					" (x, y, z, objnum, materialpath) VALUES({0}, {1}, {2}, {3}, {4})".format(
-						int(xRaw), int(yRaw), int(zRaw), int(objNum), str(materialPath)))
-			"""
-			cur.close()
+				voxel_list = [xRaw, yRaw, zRaw, objID, octPath]
+				data.append(voxel_list)
+			
+				# Flush data to file every 100,000 records
+				if idx % 100000 == 0 and idx > 0:
+					w.writerows(data)
+					stringVoxels.seek(0)
+					cur.copy_from(stringVoxels, tbname, sep=',', columns=('x', 'y', 'z', 'objID', 'octPath'))
+					stringVoxels.close()
+					stringVoxels = StringIO()
+					w = csv.writer(stringVoxels)
+					data = []
+					print(idx, "voxels written")
+
+				idx += 1
+
+			stringVoxels.seek(0)
+			cur.copy_from(stringVoxels, tbname, sep=',', columns=('x', 'y', 'z', 'objID', 'octPath'))
 			conn.commit()
+			print(idx, "voxels written")			
 		except (Exception, psycopg2.DatabaseError) as error:
 			print(error)
 		finally:
+			cur.close()
 			conn.close()
+			stringVoxels.close()
 			print('Database connection closed.')
+
+
+def insert_db(user, password, dbname, tbname, host, port, file):
+	"""
+	Add new column to a table and insert data.
+	"""
+	conn = None
+	try:
+		conn = psycopg2.connect(host=host, database=dbname, user=user, password=password, port=port)
+		conn.set_isolation_level(psycopg2.extensions.ISOLATION_LEVEL_AUTOCOMMIT)
+		cur = conn.cursor()
+		cur.execute("ALTER TABLE " + tbname + " ADD COLUMN IF NOT EXISTS octpath VARCHAR;")
+		# xyzlist = []		# store xyz in each line from raw data file
+		xyzset = set()
+		xMin, yMin, zMin = None, None, None
+		xMax, yMax, zMax = None, None, None
+		with open(file, mode='r', encoding='utf-8') as f:
+			while(True):
+				line = f.readline().strip()
+				if not line:
+					break
+				x, y, z = int(line.split()[0]), int(line.split()[1]), int(line.split()[2])				
+				# xyzlist.append([x,y,z])
+				xyzset.add(tuple([x,y,z]))
+				if xMin is None:
+					xMin, yMin, zMin = x, y, z
+					xMax, yMax, zMax = x, y, z
+				if x < xMin:
+					xMin = x
+				if y < yMin:
+					yMin = y
+				if z < zMin:
+					zMin = z
+				if x > xMax:
+					xMax = x
+				if y > yMax:
+					yMax = y
+				if z > zMax:
+					zMax = z
+
+		depth = 8
+		translateX, translateY, translateZ, scale = translation_and_scaling(xMin, xMax, yMin, yMax, zMin, zMax, depth)
+		for line in xyzset:
+			xRaw, yRaw, zRaw = line[0], line[1], line[2]
+			# Scaling coordinates.
+			x = (xRaw + translateX) * scale
+			y = (yRaw + translateY) * scale
+			z = (zRaw + translateZ) * scale
+
+			# Snap point to leaf node by converting float to integer and truncate towards 0.
+			leafNode = (int(x), int(y), int(z))
+
+			# Retrieve material path from box.
+			octPath = get_material_path(depth, leafNode[0], leafNode[1], leafNode[2])
+
+			cur.execute("UPDATE " + tbname + " SET octpath={0} WHERE x={1} AND y={2} AND z={3};".format(
+				str(octPath), int(xRaw), int(yRaw), int(zRaw)))
+		cur.close()
+		conn.commit()	# commit the changes		
+	except (Exception, psycopg2.DatabaseError) as error:
+		print(error)
+	finally:
+		return conn
 
 
 if __name__=='__main__':
@@ -263,11 +348,15 @@ if __name__=='__main__':
 	parser.add_argument('--dbname', help='database name')
 	parser.add_argument('--tbname', help='table name')
 	parser.add_argument('--host', help='host address')
+	parser.add_argument('--port', help='port number')
 	args = parser.parse_args(sys.argv[1:])
 
 	print('********** Creating Database **********')
-	conn = create_db(args.user, args.pwd, args.dbname, args.tbname, args.host)
+	conn = create_db(args.user, args.pwd, args.dbname, args.tbname, args.host, args.port)
 
 	print('********** Writing Database **********')
 	write_db(conn, args.tbname, args.input)
+
+	# print('********** Updating Database **********')
+	# insert_db(args.user, args.pwd, args.dbname, args.tbname, args.host, args.port, args.input)
 
