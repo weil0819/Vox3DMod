@@ -10,8 +10,7 @@ Usage:
 > python postgres.py --input='YOUR DATA PATH' --dbname='YOUR DATABASE NAME' 
 --host='YOUR HOST ADDRESS' --user='YOUR USER NAME' --pwd='YOUR PASSWORD' --tbname='YOUR TABLE NAME'
 e.g.,
-> python postgres.py --input=../bim.xyz --dbname=voxeldb --host=localhost 
---user=postgres --pwd=postgres --tabname=Dalton 
+> python postgres.py --host=localhost --port=5432 --dbname=voxeldb  --pwd=postgres --user=postgres --input=dtm.xyz --tbname=dtm
 
 @date: May 28, 2020
 @author: Wesley
@@ -165,7 +164,7 @@ def create_db(user, password, dbname, tbname, host, port):
 			# cur.execute('CREATE TABLE IF NOT EXISTS'+ tbname + 
 			# 	' (voxid SERIAL PRIMARY KEY, x INTEGER NOT NULL, y INTEGER NOT NULL, z INTEGER NOT NULL, objID INTEGER);')
 		cur.execute('CREATE TABLE IF NOT EXISTS '+ tbname + 
-			' (voxid serial PRIMARY KEY, x INTEGER NOT NULL, y INTEGER NOT NULL, z INTEGER NOT NULL, objID INTEGER, octPath VARCHAR);')
+			' (voxid serial PRIMARY KEY, x INTEGER NOT NULL, y INTEGER NOT NULL, z INTEGER NOT NULL, buildID INTEGER, octPath VARCHAR);')
 		# cur.execute('CREATE TABLE IF NOT EXISTS '+ tbname + 
 		# 	' (voxid serial PRIMARY KEY, x INTEGER NOT NULL, y INTEGER NOT NULL, z INTEGER NOT NULL, objID INTEGER);')
 		cur.close()
@@ -207,7 +206,7 @@ def write_db(conn, tbname, file):
 						break
 					x, y, z = int(line.split()[0]), int(line.split()[1]), int(line.split()[2])
 					# objID, buildID = int(line.split()[3]), int(line.split()[4])
-					objID = int(line.split()[3])
+					buildID = int(line.split()[3])
 					# cur.execute("INSERT INTO " + tbname + 
 					# 	" (x, y, z, objID) VALUES({0}, {1}, {2}, {3})".format(int(x), int(y), int(z), int(objID)))
 					xyzset.add(tuple(int(i) for i in line.split()))
@@ -237,7 +236,7 @@ def write_db(conn, tbname, file):
 
 			for line in xyzset:
 				xRaw, yRaw, zRaw = line[0], line[1], line[2]
-				objID = line[3]
+				buildID = line[3]
 				# Scaling coordinates.
 				x = (xRaw + translateX) * scale
 				y = (yRaw + translateY) * scale
@@ -247,14 +246,14 @@ def write_db(conn, tbname, file):
 				# Retrieve material path from box.
 				octPath = get_material_path(depth, leafNode[0], leafNode[1], leafNode[2])
 
-				voxel_list = [xRaw, yRaw, zRaw, objID, octPath]
+				voxel_list = [xRaw, yRaw, zRaw, buildID, octPath]
 				data.append(voxel_list)
 			
 				# Flush data to file every 100,000 records
 				if idx % 100000 == 0 and idx > 0:
 					w.writerows(data)
 					stringVoxels.seek(0)
-					cur.copy_from(stringVoxels, tbname, sep=',', columns=('x', 'y', 'z', 'objID', 'octPath'))
+					cur.copy_from(stringVoxels, tbname, sep=',', columns=('x', 'y', 'z', 'buildID', 'octPath'))
 					stringVoxels.close()
 					stringVoxels = StringIO()
 					w = csv.writer(stringVoxels)
@@ -264,7 +263,7 @@ def write_db(conn, tbname, file):
 				idx += 1
 
 			stringVoxels.seek(0)
-			cur.copy_from(stringVoxels, tbname, sep=',', columns=('x', 'y', 'z', 'objID', 'octPath'))
+			cur.copy_from(stringVoxels, tbname, sep=',', columns=('x', 'y', 'z', 'buildID', 'octPath'))
 			conn.commit()
 			print(idx, "voxels written")			
 		except (Exception, psycopg2.DatabaseError) as error:
