@@ -51,14 +51,14 @@ def get_build_unfragmented(dir, buildID):
 
 def get_build_fragmented(dir, buildID):
 	columns = ['x', 'y', 'z', 'objID']
-	dir = os.path.join(dir, dir_dict[int(buildID)], 'classmodel.feather')
+	dir = os.path.join(dir, dir_dict[int(buildID)], '/classmodel.feather')
 	df_build = pd.read_feather(dir, columns=columns)
 	return df_build, len(df_build)
 
 
 def get_object(dir, buildID, objID):
 	columns = ['x', 'y', 'z', 'objID']
-	dir = os.path.join(dir, dir_dict[int(buildID)], 'classmodel.feather')
+	dir = os.path.join(dir, dir_dict[int(buildID)], '/classmodel.feather')
 	df = pd.read_feather(dir, columns=columns)
 	df_obj = df.loc[df['objID']==int(objID)]
 	return df_obj, len(df_obj)
@@ -70,7 +70,7 @@ def get_rectangular(dir, buildID, xmin, xmax, ymin, ymax):
 	restrict = restrict_x + ' & ' + restrict_y
 
 	columns = ['x', 'y', 'z', 'objID']
-	dir = os.path.join(dir, dir_dict[int(buildID)], 'classmodel.feather')
+	dir = os.path.join(dir, dir_dict[int(buildID)], '/classmodel.feather')
 	df = pd.read_feather(dir, columns=columns)
 
 	df_rec = df.query(restrict)
@@ -89,7 +89,7 @@ def get_radial(dir, buildID, x, y, radius):
 	restrict = restrict_x + ' & ' + restrict_y + ' & ' + restrict_pow
 
 	columns = ['x', 'y', 'z', 'objID']
-	dir = os.path.join(dir, dir_dict[int(buildID)], 'classmodel.feather')
+	dir = os.path.join(dir, dir_dict[int(buildID)], '/classmodel.feather')
 	df = pd.read_feather(dir, columns=columns)
 
 	df_rec = df.query(restrict)
@@ -113,30 +113,63 @@ if __name__=='__main__':
 	args = parser.parse_args(sys.argv[1:])
 	if os.path.exists(args.input):
 		print('Input file exists')
+	'''
+	for i in range(3):
+		print('********** Q1: Retrieving all voxels in a given building semantic class **********')
+		message1 = 'Loading "{}" voxels in unfragmented file'.format(dir_dict[int(args.buildID)])
+		with stopwatch(message1):
+			df, _ = get_build_unfragmented(args.input, args.buildID)
+
+		message2 = 'Loading "{}" voxels in fragmented file'.format(dir_dict[int(args.buildID)])
+		with stopwatch(message2):
+			df, _ = get_build_fragmented(args.input, args.buildID)
+
+		print('********** Q2: Retrieving all voxels refer to a given IFC class **********')
+		message3 = 'Loading "{}" voxels in {} building'.format(int(args.objID), dir_dict[int(args.buildID)])
+		with stopwatch(message3):
+			df, _ = get_object(args.input, args.buildID, args.objID)
+
+		print('********** Q3: Retrieving all voxels in a given building semantic class **********')
+		message4 = 'Loading "{}" voxels in range [{}, {}] and [{}, {}]'.format(
+			dir_dict[int(args.buildID)], int(args.xmin), int(args.xmax), int(args.ymin), int(args.ymax))
+		with stopwatch(message4):
+			df, _ = get_rectangular(args.input, args.buildID, int(args.xmin), int(args.xmax), int(args.ymin), int(args.ymax))
+
+		print('********** Q4: Retrieving all voxels in a given building semantic class **********')
+		message5 = 'Loading "{}" voxels centered at ({}, {}) with radius={}'.format(
+			dir_dict[int(args.buildID)], int(args.x), int(args.y), float(args.r))
+		with stopwatch(message5):
+			df, _ = get_radial(args.input, args.buildID, int(args.x), int(args.y), float(args.r))
+	'''
 
 	print('********** Q1: Retrieving all voxels in a given building semantic class **********')
 	message1 = 'Loading "{}" voxels in unfragmented file'.format(dir_dict[int(args.buildID)])
 	with stopwatch(message1):
 		df, _ = get_build_unfragmented(args.input, args.buildID)
+		print(df.sample(5))
 
 	message2 = 'Loading "{}" voxels in fragmented file'.format(dir_dict[int(args.buildID)])
 	with stopwatch(message2):
 		df, _ = get_build_fragmented(args.input, args.buildID)
+		print(df.sample(5))
 
 	print('********** Q2: Retrieving all voxels refer to a given IFC class **********')
 	message3 = 'Loading "{}" voxels in {} building'.format(int(args.objID), dir_dict[int(args.buildID)])
 	with stopwatch(message3):
 		df, _ = get_object(args.input, args.buildID, args.objID)
+		print(df.sample(5))
 
 	print('********** Q3: Retrieving all voxels in a given building semantic class **********')
 	message4 = 'Loading "{}" voxels in range [{}, {}] and [{}, {}]'.format(
 		dir_dict[int(args.buildID)], int(args.xmin), int(args.xmax), int(args.ymin), int(args.ymax))
 	with stopwatch(message4):
 		df, _ = get_rectangular(args.input, args.buildID, int(args.xmin), int(args.xmax), int(args.ymin), int(args.ymax))
-
+		print(df.sample(5))
+		
 	print('********** Q4: Retrieving all voxels in a given building semantic class **********')
 	message5 = 'Loading "{}" voxels centered at ({}, {}) with radius={}'.format(
 		dir_dict[int(args.buildID)], int(args.x), int(args.y), float(args.r))
 	with stopwatch(message5):
 		df, _ = get_radial(args.input, args.buildID, int(args.x), int(args.y), float(args.r))
+		print(df.sample(5))
 

@@ -23,7 +23,7 @@ def stopwatch(message):
         yield
     finally:
         t1 = time.time()
-        print('Total elapsed time for %s: %.3f' % (message, t1 - t0))
+        print('Total elapsed time for %s: %.6f ms' % (message, (t1 - t0)*1000))
         return {
             'message': message,
             'elapsed_time': (t1 - t0)
