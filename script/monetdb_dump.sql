@@ -115,4 +115,4 @@ CREATE INDEX idx_dalton ON dalton(x, y, z);
 CREATE INDEX idx_quadrangle ON quadrangle(x, y, z);
 CREATE INDEX idx_roundhouse ON roundhouse(x, y, z);
 CREATE INDEX idx_scithe ON scithe(x, y, z);
-CREATE INDEX idx_building ON building(x, y, z);
+CREATE INDEX idx_building ON building(x, y, z, buildID);
