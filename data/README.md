@@ -22,13 +22,17 @@ chmod 755 ExpandTree Wcpipe mkobj2
 ```
 
 ```
+<!-- For Linux -->
 cp ../script/ExpandDtm ../script/Wcpipe ../script/mkobj2 ./dtm
 cd ./dtm
 chmod 755 ExpandDtm Wcpipe mkobj2
 ./ExpandDtm< dtm.vox | ./Wcpipe > dtm.xyz
 ./ExpandDtm< dtmbot.vox | ./Wcpipe > dtmbot.xyz
 ./mkobj2 < dtm.xyz | ./Wcpipe > dtm.obj
-./mkobj2 < dtmbot.xyz | ./Wcpipe > dtmbot.obj
+./mkobj2 < dtmbot.xyz | ./Wcpipe > dtmbot.obj  
+
+<!-- For Windows -->
+.\gawk.exe '{for(i=1;i<=$3;i++) print $1,$2,i,1}' dtm.vox > dtm.xyz
 ```
 
 

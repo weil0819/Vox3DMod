@@ -6,7 +6,7 @@
 /* ---------------------------------------------------- */
 
 /* Add PostGIS Extension */
--- CREATE EXTENSION IF NOT EXISTS POSTGIS;
+CREATE EXTENSION IF NOT EXISTS POSTGIS;
 
 
 /* Drop Tables */
