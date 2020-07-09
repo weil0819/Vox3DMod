@@ -32,7 +32,8 @@ chmod 755 ExpandDtm Wcpipe mkobj2
 ./mkobj2 < dtmbot.xyz | ./Wcpipe > dtmbot.obj  
 
 <!-- For Windows -->
-.\gawk.exe '{for(i=1;i<=$3;i++) print $1,$2,i,1}' dtm.vox > dtm.xyz
+.\gawk.exe '{for(i=1;i<=$3;i++) print $1,$2,i,1} NR==10{exit}' dtmbot.vox > dtmbot.xyz
+.\gawk.exe 'NR>=1 && NR<=10 {for(i=1;i<=$3;i++) print $1,$2,i,1}' dtmbot.vox > dtmbot.xyz
 ```
 
 
