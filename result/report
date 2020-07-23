@@ -1,0 +1,18 @@
+Q1: Load all voxels that are in a given rectangle 100<x<200 and 100<y<200 and 100<z<200.
+voxel 			voxelpt 		voxelmpt 			voxelpatch
+16,660.574		431,979.034		2,023,087.573		2,349,158.421
+
+Q2: Load all voxels that are in circle with radius 100 and center (100,200,300).
+voxel 			voxelpt 		voxelmpt 			voxelpatch
+758,528.194		929,894.207		2,632,783.758		
+
+
+Q3: Load all voxels that are buildings.
+
+
+Q4: Load all building voxels that are in circle with radius 100 and center (100,200,300).
+
+
+
+
+

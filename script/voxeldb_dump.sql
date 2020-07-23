@@ -55,7 +55,8 @@ DROP TABLE IF EXISTS voxel CASCADE;
 DROP TABLE IF EXISTS voxelpt CASCADE;
 DROP TABLE IF EXISTS voxelmpt CASCADE;
 DROP TABLE IF EXISTS voxelpatch CASCADE;
-
+DROP TABLE IF EXISTS ifcclass CASCADE;
+DROP TABLE IF EXISTS objclass CASCADE;
 
 /* Create Tables */
 CREATE TABLE voxel
@@ -84,9 +85,19 @@ CREATE TABLE voxelmpt
 );
 
 CREATE TABLE voxelpatch (
-    id SERIAL PRIMARY KEY,
-    classID INTEGER,
-    pa PCPATCH(1)
+  id SERIAL PRIMARY KEY,
+  classID INTEGER,
+  pa PCPATCH(1)
+);
+
+CREATE TABLE ifcclass (
+  ifcID INTEGER PRIMARY KEY,
+  name VARCHAR(50) NULL
+);
+
+CREATE TABLE objclass (
+  classID INTEGER PRIMARY KEY,
+  name VARCHAR(50) NULL
 );
 
 
@@ -95,7 +106,8 @@ DROP INDEX IF EXISTS idx_voxel CASCADE;
 DROP INDEX IF EXISTS idx_voxelpt CASCADE;
 DROP INDEX IF EXISTS idx_voxelmpt CASCADE;
 DROP INDEX IF EXISTS idx_voxelpatch CASCADE;
-
+DROP INDEX IF EXISTS idx_ifcclass CASCADE;
+DROP INDEX IF EXISTS idx_objclass CASCADE;
 
 /* Import Data */
 -- For table "voxel"
@@ -347,11 +359,15 @@ INSERT INTO voxelpatch (classID, pa) SELECT 56, PC_Patch(pt) FROM (SELECT PC_Mak
 INSERT INTO voxelpatch (classID, pa) SELECT 56, PC_Patch(pt) FROM (SELECT PC_MakePoint(1, ARRAY[x,y,z]) as pt FROM voxel WHERE classID=56 LIMIT 20000000 OFFSET 640000000) as tmp;
 INSERT INTO voxelpatch (classID, pa) SELECT 56, PC_Patch(pt) FROM (SELECT PC_MakePoint(1, ARRAY[x,y,z]) as pt FROM voxel WHERE classID=56 LIMIT 20000000 OFFSET 660000000) as tmp;
 
+\COPY ifcclass (ifcID, name) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\bim\ALLCLASSES' DELIMITER ' ';
+\COPY objclass (classID, name) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bldnum.txt' DELIMITER ' ';
+INSERT INTO objclass (classID, name) VALUES (55, 'tree');
+INSERT INTO objclass (classID, name) VALUES (56, 'dtmbot');
 
 /* Create Index */
 CREATE INDEX idx_voxel ON voxel(x, y, z, classID);
-CREATE INDEX idx_voxelpt ON voxelpt(classID, ifcID);
+CREATE INDEX idx_voxelpt ON voxelpt(classID);
 CREATE INDEX idx_voxelmpt ON voxelmpt(classID);
 CREATE INDEX idx_voxelpatch ON voxelpatch(classID);
-
-
+CREATE INDEX idx_ifcclass ON ifcclass(ifcID);
+CREATE INDEX idx_objclass ON objclass(classID);
