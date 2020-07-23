@@ -1,18 +1,43 @@
 Q1: Load all voxels that are in a given rectangle 100<x<200 and 100<y<200 and 100<z<200.
 voxel 			voxelpt 		voxelmpt 			voxelpatch
-16,660.574		431,979.034		2,023,087.573		2,349,158.421
+25,862.953		431,143.646		2,227,841.364		2,460,698.775
+
 
 Q2: Load all voxels that are in circle with radius 100 and center (100,200,300).
 voxel 			voxelpt 		voxelmpt 			voxelpatch
-758,528.194		929,894.207		2,632,783.758		
+799,055.547		951,726.398		2,632,783.758		
 
 
 Q3: Load all voxels that are buildings.
+voxel 			voxelpt 		voxelmpt 			voxelpatch
 
 
 Q4: Load all building voxels that are in circle with radius 100 and center (100,200,300).
+voxel 			voxelpt 		voxelmpt 			voxelpatch
 
 
+Q5: Load all details for voxel (100,200,300).
+voxel 			voxelpt 		voxelmpt 			voxelpatch
 
+
+Q6: Return the highest and lowest height of DTM of the 10 building.
+voxel 			voxelpt 		voxelmpt 			voxelpatch
+
+
+Q7: Load all voxels that are tree.
+voxel 			voxelpt 		voxelmpt 			voxelpatch
+
+
+Q8: Load all building voxels that have door in ifc attribute.
+voxel 			voxelpt 		voxelmpt 			voxelpatch
+
+
+Q9: Load all neighbors of a voxel (100,200,300).
+
+
+Q10: Compute the volume of the 10 building.
+
+
+Q11: Compute the distance between voxel (100,200,300) and voxel (200,300,400).
 
 
