@@ -163,7 +163,7 @@ FROM (
 	FROM voxelpt 
 	WHERE classid = 10
 ) AS temp, voxelpt 
-WHERE classid = 56 AND x >= minX AND x <= maxX AND y >= minY AND y <= maxY; 
+WHERE classid = 56 AND ST_X(geom) >= minX AND ST_X(geom) <= maxX AND ST_Y(geom) >= minY AND ST_Y(geom) <= maxY; 
 
 EXPLAIN ANALYZE 
 SELECT ST_ZMin(POINT_geom) AS lowest, ST_ZMax(POINT_geom) AS highest 
@@ -226,10 +226,28 @@ WHERE ifcid = 8;
 
 
 
-/* Q10: Compute the volume of the 10 building */
+/* Q10: Compute the volume of the 10 building (cubic metres) */
+EXPLAIN ANALYZE 
+SELECT 0.008*COUNT(*) AS volume
+FROM voxel 
+WHERE classid = 10;
 
+EXPLAIN ANALYZE 
+SELECT 0.008*COUNT(*) AS volume 
+FROM voxelpt 
+WHERE classid=10;
 
+EXPLAIN ANALYZE 
+SELECT 0.008*ST_NumGeometries(geom) AS volume 
+FROM voxelmpt 
+WHERE classid=10;
+
+EXPLAIN ANALYZE 
+SELECT 0.008*PC_NumPoints(pa) AS volume 
+FROM voxelpatch 
+WHERE classid=10;
 
 /* Q11: Compute the distance between voxel(x,y,z) and voxel(x,y,z) */
-
+EXPLAIN ANALYZE 
+SELECT 
 

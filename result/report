@@ -11,16 +11,23 @@ voxel 			voxelpt 		voxelmpt 			voxelpatch
 
 
 Q3: Load all voxels that are buildings.
+voxel 			voxelpt 		voxelmpt 			voxelpatch
+313,239.278		429,315.706		519,028.917			818,444.743
 
 
 Q4: Load all building voxels that are in circle with radius 100 and center (100,200,300).
+voxel 			voxelpt 		voxelmpt 			voxelpatch
+338,012.767		446,747.917		659,441.695			2,610,802.109
 
 
 Q5: Load all details for voxel (100,200,300).
+voxel 			voxelpt 		voxelmpt 			voxelpatch
+17.869			431,209.034		2,274,900.452		1,479,944.264
 
 
 Q6: Return the highest and lowest height of DTM of the 10 building.
-
+voxel 			voxelpt 		voxelmpt 			voxelpatch
+393,832.477		
 
 Q7: Load all voxels that are tree.
 
