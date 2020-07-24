@@ -29,18 +29,24 @@ Q6: Return the highest and lowest height of DTM of the 10 building.
 voxel 			voxelpt 		voxelmpt 			voxelpatch
 393,832.477		
 
+
 Q7: Load all voxels that are tree.
+voxel 			voxelpt 		voxelmpt 			voxelpatch
+185,855.487		437,093.028		
 
 
 Q8: Load all building voxels that have door in ifc attribute.
 
 
-Q9: Load all neighbors of a voxel (100,200,300).
+
+Q9: Compute the volume of the 10 building.
 
 
-Q10: Compute the volume of the 10 building.
+
+Q10: Compute the distance between voxel (100,200,300) and voxel (200,300,400).
 
 
-Q11: Compute the distance between voxel (100,200,300) and voxel (200,300,400).
+
+Q11: Load all neighbors of a voxel (100,200,300).
 
 

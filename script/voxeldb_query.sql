@@ -222,11 +222,7 @@ FROM voxelpt
 WHERE ifcid = 8;
 
 
-/* Q9: Load all neighbors of a voxel (x,y,z) */
-
-
-
-/* Q10: Compute the volume of the 10 building (cubic metres) */
+/* Q9: Compute the volume of the 10 building (cubic metres) */
 EXPLAIN ANALYZE 
 SELECT 0.008*COUNT(*) AS volume
 FROM voxel 
@@ -247,7 +243,30 @@ SELECT 0.008*PC_NumPoints(pa) AS volume
 FROM voxelpatch 
 WHERE classid=10;
 
-/* Q11: Compute the distance between voxel(x,y,z) and voxel(x,y,z) */
+
+/* Q10: Compute the distance between voxel(x,y,z) and voxel(x,y,z) */
 EXPLAIN ANALYZE 
-SELECT 
+SELECT SQRT(POW(200-100, 2) + POW(300-200, 2) + POW(400-300, 2)) AS distance;
+
+EXPLAIN ANALYZE 
+SELECT ST_3DDistance(V1.geom, V2.geom) AS distance 
+FROM voxelpt V1，voxelpt V2 
+WHERE ST_X(V1.geom) = 100 AND ST_Y(V1.geom) = 200 AND ST_Z(V1.geom) = 300 AND 
+ST_X(V2.geom) = 200 AND ST_Y(V2.geom) = 300 AND ST_Z(V2.geom) = 400;
+
+EXPLAIN ANALYZE 
+SELECT ST_3DDistance(V1.geom, V2.geom) AS distance   
+FROM (SELECT (ST_Dump(geom)).geom AS POINT_geom FROM voxelmpt) AS V1, 
+(SELECT (ST_Dump(geom)).geom AS POINT_geom FROM voxelmpt) AS V2
+WHERE ST_X(V1.POINT_geom)= 100 AND ST_Y(V1.POINT_geom) = 200 AND ST_Z(V1.POINT_geom) = 300 AND 
+ST_X(V2.POINT_geom)= 200 AND ST_Y(V2.POINT_geom) = 300 AND ST_Z(V2.POINT_geom) = 400;
+
+EXPLAIN ANALYZE 
+SELECT ST_3DDistance(V1.PCPOINT_geom::geometry, V2.PCPOINT_geom::geometry) AS distance   
+FROM (SELECT PC_Explode(pa) AS PCPOINT_geom FROM voxelpatch) AS V1, 
+(SELECT PC_Explode(pa) AS PCPOINT_geom FROM voxelpatch) AS V2 
+WHERE PC_Get(V1.PCPOINT_geom, 'X') = 100 AND PC_Get(V1.PCPOINT_geom, 'Y') = 200 AND PC_Get(V1.PCPOINT_geom, 'Z') = 300 AND 
+PC_Get(V2.PCPOINT_geom, 'X') = 200 AND PC_Get(V2.PCPOINT_geom, 'Y') = 300 AND PC_Get(V2.PCPOINT_geom, 'Z') = 400;
+
+/* Q11: Load all neighbors of a voxel (x,y,z) */
 
