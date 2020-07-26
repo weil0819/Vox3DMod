@@ -250,7 +250,7 @@ SELECT SQRT(POW(200-100, 2) + POW(300-200, 2) + POW(400-300, 2)) AS distance;
 
 EXPLAIN ANALYZE 
 SELECT ST_3DDistance(V1.geom, V2.geom) AS distance 
-FROM voxelpt V1，voxelpt V2 
+FROM voxelpt V1, voxelpt V2 
 WHERE ST_X(V1.geom) = 100 AND ST_Y(V1.geom) = 200 AND ST_Z(V1.geom) = 300 AND 
 ST_X(V2.geom) = 200 AND ST_Y(V2.geom) = 300 AND ST_Z(V2.geom) = 400;
 

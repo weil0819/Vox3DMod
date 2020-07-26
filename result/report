@@ -1,4 +1,4 @@
-Note that, all queries run once and time is measured in ms.
+153995.314Note that, all queries run once and time is measured in ms.
 
 Q1: Load all voxels that are in a given rectangle 100<x<200 and 100<y<200 and 100<z<200.
 voxel 			voxelpt 		voxelmpt 			voxelpatch
@@ -32,21 +32,22 @@ voxel 			voxelpt 		voxelmpt 			voxelpatch
 
 Q7: Load all voxels that are tree.
 voxel 			voxelpt 		voxelmpt 			voxelpatch
-185,855.487		437,093.028		
+185,855.487		437,093.028		153,995.314			244,975.596
 
 
 Q8: Load all building voxels that have door in ifc attribute.
-
+voxel 			voxelpt 		
+312,532.217		428,281.186		
 
 
 Q9: Compute the volume of the 10 building.
-
+voxel 			voxelpt 		voxelmpt 			voxelpatch
+312,686.936		430,630.631		2424.743			34.510
 
 
 Q10: Compute the distance between voxel (100,200,300) and voxel (200,300,400).
+voxel 			voxelpt 		voxelmpt 			voxelpatch
+0.011			436439.440		2095630.880			1495932.367
 
-
-
-Q11: Load all neighbors of a voxel (100,200,300).
 
 
