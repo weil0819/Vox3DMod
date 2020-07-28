@@ -110,7 +110,6 @@ DROP INDEX IF EXISTS idx_ifcclass CASCADE;
 DROP INDEX IF EXISTS idx_objclass CASCADE;
 
 /* Import Data */
--- For table "voxel"
 \COPY voxel(x, y, z, classID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld1.xyz' DELIMITER ' ';
 \COPY voxel(x, y, z, classID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld2.xyz' DELIMITER ' ';
 \COPY voxel(x, y, z, classID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld3.xyz' DELIMITER ' ';

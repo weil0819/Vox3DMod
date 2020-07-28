@@ -1,4 +1,4 @@
-153995.314Note that, all queries run once and time is measured in ms.
+Note that, all queries run once and time is measured in ms.
 
 Q1: Load all voxels that are in a given rectangle 100<x<200 and 100<y<200 and 100<z<200.
 voxel 			voxelpt 		voxelmpt 			voxelpatch
@@ -27,7 +27,7 @@ voxel 			voxelpt 		voxelmpt 			voxelpatch
 
 Q6: Return the highest and lowest height of DTM of the 10 building.
 voxel 			voxelpt 		voxelmpt 			voxelpatch
-393,832.477		
+393,832.477		> 10h			> 10h				> 10h
 
 
 Q7: Load all voxels that are tree.
@@ -42,12 +42,12 @@ voxel 			voxelpt
 
 Q9: Compute the volume of the 10 building.
 voxel 			voxelpt 		voxelmpt 			voxelpatch
-312,686.936		430,630.631		2424.743			34.510
+312,686.936		430,630.631		2,424.743			34.510
 
 
 Q10: Compute the distance between voxel (100,200,300) and voxel (200,300,400).
 voxel 			voxelpt 		voxelmpt 			voxelpatch
-0.011			436439.440		2095630.880			1495932.367
+0.011			436,439.440		2,095,630.880			1,495,932.367
 
 
 
