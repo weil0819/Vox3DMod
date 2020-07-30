@@ -166,12 +166,13 @@ DROP INDEX IF EXISTS idx_objclass CASCADE;
 UPDATE voxel SET classID=55 WHERE id > 241613693;
 \COPY voxel(x, y, z, classID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\dtm\dtmbot.xyz' DELIMITER ' ';
 UPDATE voxel SET classID=56 WHERE id > 301253693;
-\COPY voxel(x, y, z, ifcID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\bim\BE\classIDmodel.xyz' DELIMITER ' ';
-\COPY voxel(x, y, z, ifcID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\bim\BlockHouse\classIDmodel.xyz' DELIMITER ' ';
-\COPY voxel(x, y, z, ifcID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\bim\Dalton\classIDmodel.xyz' DELIMITER ' ';
-\COPY voxel(x, y, z, ifcID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\bim\Quadrangle\classIDmodel.xyz' DELIMITER ' ';
-\COPY voxel(x, y, z, ifcID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\bim\Roundhouse\classIDmodel.xyz' DELIMITER ' ';
-\COPY voxel(x, y, z, ifcID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\bim\SciThe\classIDmodel.xyz' DELIMITER ' ';
+\COPY voxel(x, y, z, ifcID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\bim\BE\classmodel.xyz' DELIMITER ' ';
+UPDATE voxel SET classID=57 WHERE classid IS NULL;
+\COPY voxel(x, y, z, ifcID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\bim\BlockHouse\classmodel.xyz' DELIMITER ' ';
+\COPY voxel(x, y, z, ifcID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\bim\Dalton\classmodel.xyz' DELIMITER ' ';
+\COPY voxel(x, y, z, ifcID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\bim\Quadrangle\classmodel.xyz' DELIMITER ' ';
+\COPY voxel(x, y, z, ifcID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\bim\Roundhouse\classmodel.xyz' DELIMITER ' ';
+\COPY voxel(x, y, z, ifcID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\bim\SciThe\classmodel.xyz' DELIMITER ' ';
 
 -- For table "voxelpt"
 INSERT INTO voxelpt(classID, ifcID, geom) SELECT classID, ifcID, ST_MakePoint(x,y,z) FROM voxel AS VALUES;
