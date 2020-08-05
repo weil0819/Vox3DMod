@@ -22,7 +22,9 @@ INSERT INTO pointcloud_formats (pcid, srid, schema) VALUES (1, 28356,
                     determine the double value.</pc:description>
     <pc:name>X</pc:name>
     <pc:interpretation>int32_t</pc:interpretation>
-    <pc:scale>0.01</pc:scale>
+    <pc:scale>0.1</pc:scale>
+    <pc:offset>336300</pc:offset>
+    <pc:active>true</pc:active>
   </pc:dimension>
   <pc:dimension>
     <pc:position>2</pc:position>
@@ -32,7 +34,9 @@ INSERT INTO pointcloud_formats (pcid, srid, schema) VALUES (1, 28356,
                     determine the double value.</pc:description>
     <pc:name>Y</pc:name>
     <pc:interpretation>int32_t</pc:interpretation>
-    <pc:scale>0.01</pc:scale>
+    <pc:scale>0.1</pc:scale>
+    <pc:offset>6245507</pc:offset>
+    <pc:active>true</pc:active>
   </pc:dimension>
   <pc:dimension>
     <pc:position>3</pc:position>
@@ -42,12 +46,380 @@ INSERT INTO pointcloud_formats (pcid, srid, schema) VALUES (1, 28356,
                     determine the double value.</pc:description>
     <pc:name>Z</pc:name>
     <pc:interpretation>int32_t</pc:interpretation>
-    <pc:scale>0.01</pc:scale>
+    <pc:scale>0.1</pc:scale>
+    <pc:offset>25</pc:offset>
+    <pc:active>true</pc:active>
+  </pc:dimension>
+  <pc:dimension>
+    <pc:position>4</pc:position>
+    <pc:size>2</pc:size>
+    <pc:description>The obj calss is the integer representation
+                    of the object semantic information. This value is optional
+                    and system specific. However, it should always be
+                    included if available.</pc:description>
+    <pc:name>objID</pc:name>
+    <pc:interpretation>uint16_t</pc:interpretation>
+    <pc:scale>1</pc:scale>
+  </pc:dimension>
+  <pc:dimension>
+    <pc:position>5</pc:position>
+    <pc:size>2</pc:size>
+    <pc:description>The ifc calss is the integer representation
+                    of the IFC semantic information. This value is optional
+                    and system specific. However, it should always be
+                    included if available.</pc:description>
+    <pc:name>ifcID</pc:name>
+    <pc:interpretation>uint16_t</pc:interpretation>
+    <pc:scale>1</pc:scale>
   </pc:dimension>
   <pc:metadata>
     <Metadata name="compression">dimensional</Metadata>
   </pc:metadata>
 </pc:PointCloudSchema>');
+
+
+INSERT INTO pointcloud_formats (pcid, srid, schema) VALUES (2, 28356,
+'<?xml version="1.0" encoding="UTF-8"?>
+<pc:PointCloudSchema xmlns:pc="http://pointcloud.org/schemas/PC/1.1"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <pc:dimension>
+    <pc:position>1</pc:position>
+    <pc:size>4</pc:size>
+    <pc:description>X coordinate as a long integer. You must use the
+                    scale and offset information of the header to
+                    determine the double value.</pc:description>
+    <pc:name>X</pc:name>
+    <pc:interpretation>int32_t</pc:interpretation>
+    <pc:scale>0.1</pc:scale>
+    <pc:offset>336042</pc:offset>
+    <pc:active>true</pc:active>
+  </pc:dimension>
+  <pc:dimension>
+    <pc:position>2</pc:position>
+    <pc:size>4</pc:size>
+    <pc:description>Y coordinate as a long integer. You must use the
+                    scale and offset information of the header to
+                    determine the double value.</pc:description>
+    <pc:name>Y</pc:name>
+    <pc:interpretation>int32_t</pc:interpretation>
+    <pc:scale>0.1</pc:scale>
+    <pc:offset>6245613</pc:offset>
+    <pc:active>true</pc:active>
+  </pc:dimension>
+  <pc:dimension>
+    <pc:position>3</pc:position>
+    <pc:size>4</pc:size>
+    <pc:description>Z coordinate as a long integer. You must use the
+                    scale and offset information of the header to
+                    determine the double value.</pc:description>
+    <pc:name>Z</pc:name>
+    <pc:interpretation>int32_t</pc:interpretation>
+    <pc:scale>0.1</pc:scale>
+    <pc:offset>27</pc:offset>
+    <pc:active>true</pc:active>
+  </pc:dimension>
+  <pc:dimension>
+    <pc:position>4</pc:position>
+    <pc:size>2</pc:size>
+    <pc:description>The obj calss is the integer representation
+                    of the object semantic information. This value is optional
+                    and system specific. However, it should always be
+                    included if available.</pc:description>
+    <pc:name>objID</pc:name>
+    <pc:interpretation>uint16_t</pc:interpretation>
+    <pc:scale>1</pc:scale>
+  </pc:dimension>
+  <pc:dimension>
+    <pc:position>5</pc:position>
+    <pc:size>2</pc:size>
+    <pc:description>The ifc calss is the integer representation
+                    of the IFC semantic information. This value is optional
+                    and system specific. However, it should always be
+                    included if available.</pc:description>
+    <pc:name>ifcID</pc:name>
+    <pc:interpretation>uint16_t</pc:interpretation>
+    <pc:scale>1</pc:scale>
+  </pc:dimension>
+  <pc:metadata>
+    <Metadata name="compression">dimensional</Metadata>
+  </pc:metadata>
+</pc:PointCloudSchema>');
+
+
+INSERT INTO pointcloud_formats (pcid, srid, schema) VALUES (3, 28356,
+'<?xml version="1.0" encoding="UTF-8"?>
+<pc:PointCloudSchema xmlns:pc="http://pointcloud.org/schemas/PC/1.1"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <pc:dimension>
+    <pc:position>1</pc:position>
+    <pc:size>4</pc:size>
+    <pc:description>X coordinate as a long integer. You must use the
+                    scale and offset information of the header to
+                    determine the double value.</pc:description>
+    <pc:name>X</pc:name>
+    <pc:interpretation>int32_t</pc:interpretation>
+    <pc:scale>0.1</pc:scale>
+    <pc:offset>336305</pc:offset>
+    <pc:active>true</pc:active>
+  </pc:dimension>
+  <pc:dimension>
+    <pc:position>2</pc:position>
+    <pc:size>4</pc:size>
+    <pc:description>Y coordinate as a long integer. You must use the
+                    scale and offset information of the header to
+                    determine the double value.</pc:description>
+    <pc:name>Y</pc:name>
+    <pc:interpretation>int32_t</pc:interpretation>
+    <pc:scale>0.1</pc:scale>
+    <pc:offset>6245569</pc:offset>
+    <pc:active>true</pc:active>
+  </pc:dimension>
+  <pc:dimension>
+    <pc:position>3</pc:position>
+    <pc:size>4</pc:size>
+    <pc:description>Z coordinate as a long integer. You must use the
+                    scale and offset information of the header to
+                    determine the double value.</pc:description>
+    <pc:name>Z</pc:name>
+    <pc:interpretation>int32_t</pc:interpretation>
+    <pc:scale>0.1</pc:scale>
+    <pc:offset>29</pc:offset>
+    <pc:active>true</pc:active>
+  </pc:dimension>
+  <pc:dimension>
+    <pc:position>4</pc:position>
+    <pc:size>2</pc:size>
+    <pc:description>The obj calss is the integer representation
+                    of the object semantic information. This value is optional
+                    and system specific. However, it should always be
+                    included if available.</pc:description>
+    <pc:name>objID</pc:name>
+    <pc:interpretation>uint16_t</pc:interpretation>
+    <pc:scale>1</pc:scale>
+  </pc:dimension>
+  <pc:dimension>
+    <pc:position>5</pc:position>
+    <pc:size>2</pc:size>
+    <pc:description>The ifc calss is the integer representation
+                    of the IFC semantic information. This value is optional
+                    and system specific. However, it should always be
+                    included if available.</pc:description>
+    <pc:name>ifcID</pc:name>
+    <pc:interpretation>uint16_t</pc:interpretation>
+    <pc:scale>1</pc:scale>
+  </pc:dimension>
+  <pc:metadata>
+    <Metadata name="compression">dimensional</Metadata>
+  </pc:metadata>
+</pc:PointCloudSchema>');
+
+
+
+INSERT INTO pointcloud_formats (pcid, srid, schema) VALUES (4, 28356,
+'<?xml version="1.0" encoding="UTF-8"?>
+<pc:PointCloudSchema xmlns:pc="http://pointcloud.org/schemas/PC/1.1"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <pc:dimension>
+    <pc:position>1</pc:position>
+    <pc:size>4</pc:size>
+    <pc:description>X coordinate as a long integer. You must use the
+                    scale and offset information of the header to
+                    determine the double value.</pc:description>
+    <pc:name>X</pc:name>
+    <pc:interpretation>int32_t</pc:interpretation>
+    <pc:scale>0.1</pc:scale>
+    <pc:offset>336409</pc:offset>
+    <pc:active>true</pc:active>
+  </pc:dimension>
+  <pc:dimension>
+    <pc:position>2</pc:position>
+    <pc:size>4</pc:size>
+    <pc:description>Y coordinate as a long integer. You must use the
+                    scale and offset information of the header to
+                    determine the double value.</pc:description>
+    <pc:name>Y</pc:name>
+    <pc:interpretation>int32_t</pc:interpretation>
+    <pc:scale>0.1</pc:scale>
+    <pc:offset>6245580</pc:offset>
+    <pc:active>true</pc:active>
+  </pc:dimension>
+  <pc:dimension>
+    <pc:position>3</pc:position>
+    <pc:size>4</pc:size>
+    <pc:description>Z coordinate as a long integer. You must use the
+                    scale and offset information of the header to
+                    determine the double value.</pc:description>
+    <pc:name>Z</pc:name>
+    <pc:interpretation>int32_t</pc:interpretation>
+    <pc:scale>0.1</pc:scale>
+    <pc:offset>31</pc:offset>
+    <pc:active>true</pc:active>
+  </pc:dimension>
+  <pc:dimension>
+    <pc:position>4</pc:position>
+    <pc:size>2</pc:size>
+    <pc:description>The obj calss is the integer representation
+                    of the object semantic information. This value is optional
+                    and system specific. However, it should always be
+                    included if available.</pc:description>
+    <pc:name>objID</pc:name>
+    <pc:interpretation>uint16_t</pc:interpretation>
+    <pc:scale>1</pc:scale>
+  </pc:dimension>
+  <pc:dimension>
+    <pc:position>5</pc:position>
+    <pc:size>2</pc:size>
+    <pc:description>The ifc calss is the integer representation
+                    of the IFC semantic information. This value is optional
+                    and system specific. However, it should always be
+                    included if available.</pc:description>
+    <pc:name>ifcID</pc:name>
+    <pc:interpretation>uint16_t</pc:interpretation>
+    <pc:scale>1</pc:scale>
+  </pc:dimension>
+  <pc:metadata>
+    <Metadata name="compression">dimensional</Metadata>
+  </pc:metadata>
+</pc:PointCloudSchema>');
+
+
+
+INSERT INTO pointcloud_formats (pcid, srid, schema) VALUES (5, 28356,
+'<?xml version="1.0" encoding="UTF-8"?>
+<pc:PointCloudSchema xmlns:pc="http://pointcloud.org/schemas/PC/1.1"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <pc:dimension>
+    <pc:position>1</pc:position>
+    <pc:size>4</pc:size>
+    <pc:description>X coordinate as a long integer. You must use the
+                    scale and offset information of the header to
+                    determine the double value.</pc:description>
+    <pc:name>X</pc:name>
+    <pc:interpretation>int32_t</pc:interpretation>
+    <pc:scale>0.1</pc:scale>
+    <pc:offset>336047</pc:offset>
+    <pc:active>true</pc:active>
+  </pc:dimension>
+  <pc:dimension>
+    <pc:position>2</pc:position>
+    <pc:size>4</pc:size>
+    <pc:description>Y coordinate as a long integer. You must use the
+                    scale and offset information of the header to
+                    determine the double value.</pc:description>
+    <pc:name>Y</pc:name>
+    <pc:interpretation>int32_t</pc:interpretation>
+    <pc:scale>0.1</pc:scale>
+    <pc:offset>6245651</pc:offset>
+    <pc:active>true</pc:active>
+  </pc:dimension>
+  <pc:dimension>
+    <pc:position>3</pc:position>
+    <pc:size>4</pc:size>
+    <pc:description>Z coordinate as a long integer. You must use the
+                    scale and offset information of the header to
+                    determine the double value.</pc:description>
+    <pc:name>Z</pc:name>
+    <pc:interpretation>int32_t</pc:interpretation>
+    <pc:scale>0.1</pc:scale>
+    <pc:offset>25</pc:offset>
+    <pc:active>true</pc:active>
+  </pc:dimension>
+  <pc:dimension>
+    <pc:position>4</pc:position>
+    <pc:size>2</pc:size>
+    <pc:description>The obj calss is the integer representation
+                    of the object semantic information. This value is optional
+                    and system specific. However, it should always be
+                    included if available.</pc:description>
+    <pc:name>objID</pc:name>
+    <pc:interpretation>uint16_t</pc:interpretation>
+    <pc:scale>1</pc:scale>
+  </pc:dimension>
+  <pc:dimension>
+    <pc:position>5</pc:position>
+    <pc:size>2</pc:size>
+    <pc:description>The ifc calss is the integer representation
+                    of the IFC semantic information. This value is optional
+                    and system specific. However, it should always be
+                    included if available.</pc:description>
+    <pc:name>ifcID</pc:name>
+    <pc:interpretation>uint16_t</pc:interpretation>
+    <pc:scale>1</pc:scale>
+  </pc:dimension>
+  <pc:metadata>
+    <Metadata name="compression">dimensional</Metadata>
+  </pc:metadata>
+</pc:PointCloudSchema>');
+
+
+
+INSERT INTO pointcloud_formats (pcid, srid, schema) VALUES (6, 28356,
+'<?xml version="1.0" encoding="UTF-8"?>
+<pc:PointCloudSchema xmlns:pc="http://pointcloud.org/schemas/PC/1.1"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <pc:dimension>
+    <pc:position>1</pc:position>
+    <pc:size>4</pc:size>
+    <pc:description>X coordinate as a long integer. You must use the
+                    scale and offset information of the header to
+                    determine the double value.</pc:description>
+    <pc:name>X</pc:name>
+    <pc:interpretation>int32_t</pc:interpretation>
+    <pc:scale>0.1</pc:scale>
+    <pc:offset>336325</pc:offset>
+    <pc:active>true</pc:active>
+  </pc:dimension>
+  <pc:dimension>
+    <pc:position>2</pc:position>
+    <pc:size>4</pc:size>
+    <pc:description>Y coordinate as a long integer. You must use the
+                    scale and offset information of the header to
+                    determine the double value.</pc:description>
+    <pc:name>Y</pc:name>
+    <pc:interpretation>int32_t</pc:interpretation>
+    <pc:scale>0.1</pc:scale>
+    <pc:offset>6245582</pc:offset>
+    <pc:active>true</pc:active>
+  </pc:dimension>
+  <pc:dimension>
+    <pc:position>3</pc:position>
+    <pc:size>4</pc:size>
+    <pc:description>Z coordinate as a long integer. You must use the
+                    scale and offset information of the header to
+                    determine the double value.</pc:description>
+    <pc:name>Z</pc:name>
+    <pc:interpretation>int32_t</pc:interpretation>
+    <pc:scale>0.1</pc:scale>
+    <pc:offset>28</pc:offset>
+    <pc:active>true</pc:active>
+  </pc:dimension>
+  <pc:dimension>
+    <pc:position>4</pc:position>
+    <pc:size>2</pc:size>
+    <pc:description>The obj calss is the integer representation
+                    of the object semantic information. This value is optional
+                    and system specific. However, it should always be
+                    included if available.</pc:description>
+    <pc:name>objID</pc:name>
+    <pc:interpretation>uint16_t</pc:interpretation>
+    <pc:scale>1</pc:scale>
+  </pc:dimension>
+  <pc:dimension>
+    <pc:position>5</pc:position>
+    <pc:size>2</pc:size>
+    <pc:description>The ifc calss is the integer representation
+                    of the IFC semantic information. This value is optional
+                    and system specific. However, it should always be
+                    included if available.</pc:description>
+    <pc:name>ifcID</pc:name>
+    <pc:interpretation>uint16_t</pc:interpretation>
+    <pc:scale>1</pc:scale>
+  </pc:dimension>
+  <pc:metadata>
+    <Metadata name="compression">dimensional</Metadata>
+  </pc:metadata>
+</pc:PointCloudSchema>');
+
 
 
 /* Drop Tables */
@@ -65,14 +437,14 @@ CREATE TABLE voxel
 	x INTEGER NOT NULL,
 	y INTEGER NOT NULL,
 	z INTEGER NOT NULL,
-	classID INTEGER,
+	objID INTEGER,
 	ifcID INTEGER
 );
 
 CREATE TABLE voxelpt
 (
 	id serial PRIMARY KEY,
-	classID INTEGER,
+	objID INTEGER,
 	ifcID INTEGER,
 	geom geometry
 );
@@ -80,14 +452,19 @@ CREATE TABLE voxelpt
 CREATE TABLE voxelmpt
 (
 	id serial PRIMARY KEY,
-	classID INTEGER,
+	objID INTEGER,
+  ifcID INTEGER,
 	geom geometry
 );
 
 CREATE TABLE voxelpatch (
   id SERIAL PRIMARY KEY,
-  classID INTEGER,
-  pa PCPATCH(1)
+  paone PCPATCH(1),
+  patwo PCPATCH(2),
+  pathree PCPATCH(3),
+  pafour PCPATCH(4),
+  pafive PCPATCH(5),
+  pasix PCPATCH(6)
 );
 
 CREATE TABLE ifcclass (
@@ -96,7 +473,7 @@ CREATE TABLE ifcclass (
 );
 
 CREATE TABLE objclass (
-  classID INTEGER PRIMARY KEY,
+  objID INTEGER PRIMARY KEY,
   name VARCHAR(50) NULL
 );
 
@@ -110,74 +487,70 @@ DROP INDEX IF EXISTS idx_ifcclass CASCADE;
 DROP INDEX IF EXISTS idx_objclass CASCADE;
 
 /* Import Data */
-\COPY voxel(x, y, z, classID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld1.xyz' DELIMITER ' ';
-\COPY voxel(x, y, z, classID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld2.xyz' DELIMITER ' ';
-\COPY voxel(x, y, z, classID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld3.xyz' DELIMITER ' ';
-\COPY voxel(x, y, z, classID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld4.xyz' DELIMITER ' ';
-\COPY voxel(x, y, z, classID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld5.xyz' DELIMITER ' ';
-\COPY voxel(x, y, z, classID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld6.xyz' DELIMITER ' ';
-\COPY voxel(x, y, z, classID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld7.xyz' DELIMITER ' ';
-\COPY voxel(x, y, z, classID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld8.xyz' DELIMITER ' ';
-\COPY voxel(x, y, z, classID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld9.xyz' DELIMITER ' ';
-\COPY voxel(x, y, z, classID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld10.xyz' DELIMITER ' ';
-\COPY voxel(x, y, z, classID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld11.xyz' DELIMITER ' ';
-\COPY voxel(x, y, z, classID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld12.xyz' DELIMITER ' ';
-\COPY voxel(x, y, z, classID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld13.xyz' DELIMITER ' ';
-\COPY voxel(x, y, z, classID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld14.xyz' DELIMITER ' ';
-\COPY voxel(x, y, z, classID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld15.xyz' DELIMITER ' ';
-\COPY voxel(x, y, z, classID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld16.xyz' DELIMITER ' ';
-\COPY voxel(x, y, z, classID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld17.xyz' DELIMITER ' ';
-\COPY voxel(x, y, z, classID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld18.xyz' DELIMITER ' ';
-\COPY voxel(x, y, z, classID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld19.xyz' DELIMITER ' ';
-\COPY voxel(x, y, z, classID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld20.xyz' DELIMITER ' ';
-\COPY voxel(x, y, z, classID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld21.xyz' DELIMITER ' ';
-\COPY voxel(x, y, z, classID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld22.xyz' DELIMITER ' ';
-\COPY voxel(x, y, z, classID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld23.xyz' DELIMITER ' ';
-\COPY voxel(x, y, z, classID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld24.xyz' DELIMITER ' ';
-\COPY voxel(x, y, z, classID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld25.xyz' DELIMITER ' ';
-\COPY voxel(x, y, z, classID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld27.xyz' DELIMITER ' ';
-\COPY voxel(x, y, z, classID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld28.xyz' DELIMITER ' ';
-\COPY voxel(x, y, z, classID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld29.xyz' DELIMITER ' ';
-\COPY voxel(x, y, z, classID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld30.xyz' DELIMITER ' ';
-\COPY voxel(x, y, z, classID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld31.xyz' DELIMITER ' ';
-\COPY voxel(x, y, z, classID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld32.xyz' DELIMITER ' ';
-\COPY voxel(x, y, z, classID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld33.xyz' DELIMITER ' ';
-\COPY voxel(x, y, z, classID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld34.xyz' DELIMITER ' ';
-\COPY voxel(x, y, z, classID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld35.xyz' DELIMITER ' ';
-\COPY voxel(x, y, z, classID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld36.xyz' DELIMITER ' ';
-\COPY voxel(x, y, z, classID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld37.xyz' DELIMITER ' ';
-\COPY voxel(x, y, z, classID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld38.xyz' DELIMITER ' ';
-\COPY voxel(x, y, z, classID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld39.xyz' DELIMITER ' ';
-\COPY voxel(x, y, z, classID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld40.xyz' DELIMITER ' ';
-\COPY voxel(x, y, z, classID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld41.xyz' DELIMITER ' ';
-\COPY voxel(x, y, z, classID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld42.xyz' DELIMITER ' ';
-\COPY voxel(x, y, z, classID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld43.xyz' DELIMITER ' ';
-\COPY voxel(x, y, z, classID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld44.xyz' DELIMITER ' ';
-\COPY voxel(x, y, z, classID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld45.xyz' DELIMITER ' ';
-\COPY voxel(x, y, z, classID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld47.xyz' DELIMITER ' ';
-\COPY voxel(x, y, z, classID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld48.xyz' DELIMITER ' ';
-\COPY voxel(x, y, z, classID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld49.xyz' DELIMITER ' ';
-\COPY voxel(x, y, z, classID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld50.xyz' DELIMITER ' ';
-\COPY voxel(x, y, z, classID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld51.xyz' DELIMITER ' ';
-\COPY voxel(x, y, z, classID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld52.xyz' DELIMITER ' ';
-\COPY voxel(x, y, z, classID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld53.xyz' DELIMITER ' ';
-\COPY voxel(x, y, z, classID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\build\bld54.xyz' DELIMITER ' ';
-\COPY voxel(x, y, z, classID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\tree\tree.xyz' DELIMITER ' ';
-UPDATE voxel SET classID=55 WHERE id > 241613693;
-\COPY voxel(x, y, z, classID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\dtm\dtmbot.xyz' DELIMITER ' ';
-UPDATE voxel SET classID=56 WHERE id > 301253693;
-\COPY voxel(x, y, z, ifcID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\bim\BE\classmodel.xyz' DELIMITER ' ';
-UPDATE voxel SET classID=57 WHERE classid IS NULL;
-\COPY voxel(x, y, z, ifcID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\bim\BlockHouse\classmodel.xyz' DELIMITER ' ';
-\COPY voxel(x, y, z, ifcID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\bim\Dalton\classmodel.xyz' DELIMITER ' ';
-\COPY voxel(x, y, z, ifcID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\bim\Quadrangle\classmodel.xyz' DELIMITER ' ';
-\COPY voxel(x, y, z, ifcID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\bim\Roundhouse\classmodel.xyz' DELIMITER ' ';
-\COPY voxel(x, y, z, ifcID) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\bim\SciThe\classmodel.xyz' DELIMITER ' ';
 
 -- For table "voxelpt"
 INSERT INTO voxelpt(classID, ifcID, geom) SELECT classID, ifcID, ST_MakePoint(x,y,z) FROM voxel AS VALUES;
 
 -- For table "voxelmpt"
+DO $$  
+DECLARE  
+    f record;  
+BEGIN  
+    FOR f in SELECT DISTINCT objID, ifcID   
+    FROM voxelpt  
+    LOOP  
+        INSERT INTO voxelmpt(objID, ifcID, geom)   
+        VALUES (f.objID, f.ifcID, ST_Collect(ARRAY(SELECT geom FROM voxelpt WHERE objID=f.objID AND ifcID=f.ifcID)));  
+    END LOOP;  
+END;  
+$$  
+
+-- For table "voxelpatch"
+DO $$  
+DECLARE  
+    f record;  
+BEGIN  
+    FOR f in SELECT DISTINCT objID, ifcID   
+    FROM voxelpt  
+    LOOP  
+        INSERT INTO voxelpatch(objID, ifcID)   
+        VALUES (f.objID, f.ifcID); 
+        IF f.objID = 1 THEN 
+          INSERT INTO voxelpatch (paone) 
+          SELECT PC_Patch(pt) 
+          FROM (SELECT PC_MakePoint(1, ARRAY[x,y,z]) as pt 
+            FROM voxel WHERE objID=f.objID AND ifcID=f.ifcID) as tmp;
+        ELSIF f.objID = 2 THEN 
+          INSERT INTO voxelpatch (patwo) 
+          SELECT PC_Patch(pt) 
+          FROM (SELECT PC_MakePoint(2, ARRAY[x,y,z]) as pt 
+            FROM voxel WHERE objID=f.objID AND ifcID=f.ifcID) as tmp;
+        ELSIF f.objID = 3 THEN 
+          INSERT INTO voxelpatch (pathree) 
+          SELECT PC_Patch(pt) 
+          FROM (SELECT PC_MakePoint(3, ARRAY[x,y,z]) as pt 
+            FROM voxel WHERE objID=f.objID AND ifcID=f.ifcID) as tmp;
+        ELSIF f.objID = 4 THEN 
+          INSERT INTO voxelpatch (pafour) 
+          SELECT PC_Patch(pt) 
+          FROM (SELECT PC_MakePoint(4, ARRAY[x,y,z]) as pt 
+            FROM voxel WHERE objID=f.objID AND ifcID=f.ifcID) as tmp;
+        ELSIF f.objID = 5 THEN 
+          INSERT INTO voxelpatch (pafive) 
+          SELECT PC_Patch(pt) 
+          FROM (SELECT PC_MakePoint(5, ARRAY[x,y,z]) as pt 
+            FROM voxel WHERE objID=f.objID AND ifcID=f.ifcID) as tmp;
+        ELSE 
+          INSERT INTO voxelpatch (pasix) 
+          SELECT PC_Patch(pt) 
+          FROM (SELECT PC_MakePoint(6, ARRAY[x,y,z]) as pt 
+            FROM voxel WHERE objID=f.objID AND ifcID=f.ifcID) as tmp;
+        END IF;        
+    END LOOP;  
+END;  
+$$ 
+
+
 
 
 /* Create Index */
@@ -187,3 +560,24 @@ CREATE INDEX idx_voxelmpt ON voxelmpt(classID);
 CREATE INDEX idx_voxelpatch ON voxelpatch(classID);
 CREATE INDEX idx_ifcclass ON ifcclass(ifcID);
 CREATE INDEX idx_objclass ON objclass(classID);
+
+
+\COPY objclass (objID, name) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\bim\bldnum.txt' DELIMITER ' ';
+
+<pc:dimension>
+    <pc:position>1</pc:position>
+    <pc:size>4</pc:size>
+    <pc:description>
+    X coordinate as a long integer. You must use the
+    scale and offset information of the header to
+    determine the double value.
+    </pc:description>
+    <pc:name>X</pc:name>
+    <pc:interpretation>int32_t</pc:interpretation>
+    <pc:scale>0.1</pc:scale>
+    <pc:offset>336300</pc:offset>
+    <pc:active>true</pc:active>
+</pc:dimension>
+
+
+
