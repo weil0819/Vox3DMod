@@ -562,7 +562,7 @@ CREATE INDEX idx_ifcclass ON ifcclass(ifcID);
 CREATE INDEX idx_objclass ON objclass(classID);
 
 
-\COPY objclass (objID, name) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\bim\bldnum.txt' DELIMITER ' ';
+\COPY objclass (objID, name, scale, offsetX, offsetY, offsetZ) FROM 'C:\Users\z5039792\Documents\Vox3DMod\data\bim\bldnum.txt' DELIMITER ' ';
 
 <pc:dimension>
     <pc:position>1</pc:position>
@@ -578,6 +578,184 @@ CREATE INDEX idx_objclass ON objclass(classID);
     <pc:offset>336300</pc:offset>
     <pc:active>true</pc:active>
 </pc:dimension>
+
+
+
+-- generate geom for each building object
+CERATE VIEW box AS 
+    SELECT ST_Translate(ST_Scale(ST_SetSRID(ST_MakeBox2D(ST_Point(minX, minY), ST_Point(maxX, maxY)),28356), O.scale, O.scale), O.offsetX, o.offsetY) AS geom
+    FROM (SELECT objID, MIN(x) AS minX, MIN(y) AS minY, MAX(x) AS maxX, MAX(y) AS maxY FROM voxel GROUP BY objID) AS tmp 
+    JOIN objclass O ON tmp.objID=O.objID;
+
+-- calculate distance
+SELECT t1.obj, t2.obj, ST_Distance(t1.geom, t2.geom) as dist
+FROM box t1, box t2, objclass O
+WHERE t1.obj != t2.obj AND t1.obj = O.objID AND O.name='Built Environment' order by dist;
+
+
+DO $$  
+BEGIN  
+    FOR idx in 1..54  
+    LOOP  
+        IF idx = 26 OR idx = 46 THEN  
+            raise notice 'The buidling % could not be found', idx;  
+        ELSE    
+            INSERT INTO voxelmpt(classID, geom)   
+            VALUES (idx, ST_Collect(ARRAY(SELECT geom FROM voxelpt WHERE classID=idx AND ifcID IS NULL)));  
+        END IF;  
+    END LOOP;  
+END;  
+$$  
+
+
+DO $$  
+DECLARE  
+    f record;  
+BEGIN  
+    FOR f in SELECT DISTINCT classID, ifcID   
+        FROM voxel WHERE ifcID IS NOT NULL  
+    LOOP  
+        INSERT INTO voxelmpt(classID, ifcID, geom)   
+        VALUES (f.classID, f.ifcID, ST_Collect(ARRAY(SELECT geom FROM voxelpt WHERE ifcID IS NOT NULL AND classID=f.classID  AND ifcID=f.ifcID)));  
+    END LOOP;  
+END;  
+$$  
+
+
+CERATE VIEW box AS 
+SELECT ST_Translate(
+    ST_Scale(ST_SetSRID(
+    ST_MakeBox2D(
+        ST_Point(minX, minY), 
+        ST_Point(maxX, maxY)
+    ),28356), O.scale, O.scale), 
+    O.offsetX, o.offsetY) AS geom
+FROM (SELECT objID, 
+    MIN(x) AS minX, MIN(y) AS minY, 
+    MAX(x) AS maxX, MAX(y) AS maxY 
+    FROM voxel GROUP BY objID) AS tmp 
+JOIN objclass O ON tmp.objID=O.objID;
+
+
+CREATE VIEW box AS
+SELECT ST_Extent(
+    ST_Translate(ST_Scale(
+        pa::geometry, O.scale, O.scale), 
+    O.offsetX, o.offsetY))::geometry AS geom  
+FROM voxelpatch V
+JOIN objclass O ON V.objID=O.objID
+GROUP BY V.objID;
+
+SELECT ST_Translate(ST_Scale(
+        geom, O.scale, O.scale), 
+    O.offsetX, o.offsetY)) AS geom
+FROM voxelmpt V
+JOIN objclass O ON V.objID=O.objID
+GROUP BY V.objID;
+
+SELECT geom 
+FROM voxelmptnumeric V
+JOIN objclass O ON V.objID=O.objID
+GROUP BY V.objID;
+
+
+DO $$  
+BEGIN  
+    FOR idx in 1..118  
+    LOOP 
+        INSERT INTO voxelmpt(classID, ifcID, geom)   
+        VALUES (55, 27, ST_Collect(ARRAY(
+            SELECT V.geom 
+            FROM voxelpt V 
+            JOIN road R ON ST_WITHIN(V.geom, R.geom) 
+            WHERE V.classid=55 AND R.id=idx)));   
+    END LOOP;  
+END;  
+$$   
+
+
+-- voxelpatch table
+DO $$  
+BEGIN  
+    FOR idx in 1..54  
+    LOOP  
+        IF idx = 26 OR idx = 46 THEN  
+            raise notice 'The buidling % could not be found', idx;  
+        ELSE    
+            INSERT INTO voxelpatch(classID, pa)   
+            VALUES (idx, PC_Patch(ARRAY(SELECT PC_MakePoint(1, ARRAY[x,y,z]) as pt FROM voxel WHERE classID=idx AND ifcID IS NULL)));
+        END IF;
+    END LOOP;
+END;
+$$  
+
+
+DO $$  
+DECLARE  
+    f record;  
+BEGIN  
+    FOR f in SELECT DISTINCT classID, ifcID   
+        FROM voxel WHERE ifcID IS NOT NULL  
+    LOOP  
+        INSERT INTO voxelpatch(classID, ifcID, geom)   
+        VALUES (f.classID, f.ifcID, PC_Patch(ARRAY(SELECT PC_MakePoint(1, ARRAY[x,y,z]) as pt FROM voxel WHERE ifcID IS NOT NULL AND classID=f.classID  AND ifcID=f.ifcID)));  
+    END LOOP;  
+END;  
+$$
+
+
+
+DO $$    
+BEGIN    
+    FOR idx in 1..1345    
+    LOOP   
+        INSERT INTO voxelpatch(classID, ifcID, geom)     
+        VALUES (54, 30, PC_Patch(ARRAY(
+            SELECT V.pt
+            FROM (SELECT PC_MakePoint(1, ARRAY[x,y,z]) as pt FROM voxel WHERE classID=54) AS V 
+            JOIN tree T ON ST_WITHIN(V.pt::geometry, ST_Buffer(T.geom, 4, 'quad_segs=8'))   
+            WHERE T.id=idx)));     
+    END LOOP;    
+END;    
+$$
+
+
+DO $$  
+BEGIN  
+    FOR idx in 1..118  
+    LOOP 
+        INSERT INTO voxelpatch(classID, ifcID, geom)   
+        VALUES (55, 27, PC_Patch(ARRAY(
+            SELECT V.pt
+            FROM (SELECT PC_MakePoint(1, ARRAY[x,y,z]) as pt FROM voxel WHERE classID=55) AS V 
+            JOIN road R ON ST_WITHIN(V.pt::geometry, R.geom) 
+            WHERE R.id=idx)));   
+    END LOOP;  
+END;  
+$$
+
+
+DO $$  
+BEGIN  
+    FOR idx in 1..121  
+    LOOP 
+        INSERT INTO voxelpatch(classID, ifcID, geom)   
+        VALUES (55, 29, PC_Patch(ARRAY(
+            SELECT V.pt
+            FROM (SELECT PC_MakePoint(1, ARRAY[x,y,z]) as pt FROM voxel WHERE classID=55) AS V 
+            JOIN building B ON ST_WITHIN(V.pt::geometry, B.geom)
+            WHERE B.id=idx)));   
+    END LOOP;  
+END;  
+$$
+ 
+
+
+   
+
+
+
+
 
 
 
