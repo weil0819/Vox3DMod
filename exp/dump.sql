@@ -659,19 +659,41 @@ JOIN objclass O ON V.objID=O.objID
 GROUP BY V.objID;
 
 
+INSERT INTO ifcclass(ifcid, name) VALUES (30, 'tree');  
+DO $$    
+BEGIN    
+    FOR idx in 1..1345    
+    LOOP   
+        INSERT INTO voxelmpt(classID, ifcID, geom)     
+        VALUES (55, 30, ST_Collect(ARRAY(  
+            SELECT V.geom   
+            FROM voxelpt V   
+            JOIN tree T ON ST_WITHIN(V.geom, ST_Buffer(T.geom, 4, 'quad_segs=8'))   
+            WHERE V.classid=55 AND T.id=idx))); 
+        DELETE FROM voxelmpt WHERE classID=55 AND ifcID=30 AND geom IS NULL; 
+    END LOOP;    
+END;    
+$$  
+
+
+
 DO $$  
 BEGIN  
     FOR idx in 1..118  
     LOOP 
         INSERT INTO voxelmpt(classID, ifcID, geom)   
-        VALUES (55, 27, ST_Collect(ARRAY(
+        VALUES (56, 27, ST_Collect(ARRAY(
             SELECT V.geom 
             FROM voxelpt V 
             JOIN road R ON ST_WITHIN(V.geom, R.geom) 
-            WHERE V.classid=55 AND R.id=idx)));   
+            WHERE V.classid=56 AND R.id=idx))); 
+        DELETE FROM voxelmpt WHERE classID=56 AND ifcID=27 AND geom IS NULL;   
     END LOOP;  
 END;  
 $$   
+
+
+
 
 
 -- voxelpatch table
