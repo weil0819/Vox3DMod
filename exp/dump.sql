@@ -693,6 +693,44 @@ END;
 $$   
 
 
+INSERT INTO ifcclass(ifcid, name) VALUES (28, 'greenarea');  
+DO $$    
+BEGIN    
+    FOR idx in 1..120    
+    LOOP   
+        INSERT INTO voxelmpt(classID, ifcID, geom)     
+        VALUES (56, 28, ST_Collect(ARRAY(  
+            SELECT V.geom   
+            FROM voxelpt V   
+            JOIN greenareas G ON ST_WITHIN(V.geom, G.geom)   
+            WHERE V.classid=56 AND G.gid=idx)));
+        DELETE FROM voxelmpt WHERE classID=56 AND ifcID=28 AND geom IS NULL;   
+    END LOOP;    
+END;    
+$$  
+
+
+INSERT INTO ifcclass(ifcid, name) VALUES (29, 'building');  
+DO $$    
+BEGIN    
+    FOR idx in 1..121    
+    LOOP   
+       INSERT INTO voxelmpt(classID, ifcID, geom)     
+        VALUES (56, 29, ST_Collect(ARRAY(  
+            SELECT V.geom   
+            FROM voxelpt V   
+            JOIN building B ON ST_WITHIN(V.geom, B.geom)   
+            WHERE V.classid=56 AND B.id=idx)));
+        DELETE FROM voxelmpt WHERE classID=56 AND ifcID=29 AND geom IS NULL;
+    END LOOP;    
+END;    
+$$ 
+
+
+DROP INDEX IF EXISTS idx_voxelmpt CASCADE;  
+DROP INDEX IF EXISTS geom_voxelmpt CASCADE;  
+CREATE INDEX idx_voxelmpt ON voxelmpt(classID, ifcID);  
+CREATE INDEX geom_voxelmpt ON voxelmpt USING GIST (geom);  
 
 
 
@@ -726,55 +764,168 @@ END;
 $$
 
 
-
+-- ************ tree ************
 DO $$    
 BEGIN    
     FOR idx in 1..1345    
     LOOP   
-        INSERT INTO voxelpatch(classID, ifcID, geom)     
-        VALUES (54, 30, PC_Patch(ARRAY(
+        INSERT INTO voxelpatch(classID, ifcID, pa)     
+        VALUES (55, 30, PC_Patch(ARRAY(
             SELECT V.pt
-            FROM (SELECT PC_MakePoint(1, ARRAY[x,y,z]) as pt FROM voxel WHERE classID=54) AS V 
+            FROM (SELECT PC_MakePoint(1, ARRAY[x,y,z]) as pt FROM voxel WHERE classID=55) AS V 
             JOIN tree T ON ST_WITHIN(V.pt::geometry, ST_Buffer(T.geom, 4, 'quad_segs=8'))   
-            WHERE T.id=idx)));     
+            WHERE T.id=idx)));
+        DELETE FROM voxelpatch WHERE classID=55 AND ifcID=30 AND PC_NumPoints(pa) < 1;   
     END LOOP;    
 END;    
 $$
 
 
+SELECT count(PC_MakePoint(1, ARRAY[x,y,z])) 
+FROM (
+    SELECT ST_X((ST_DumpPoints(f.geom)).geom) AS x, 
+    ST_Y((ST_DumpPoints(f.geom)).geom) AS y, 
+    ST_Z((ST_DumpPoints(f.geom)).geom) AS z 
+    FROM (SELECT geom FROM voxelmpt WHERE classID=55 AND ifcID=30 AND geom IS NOT NULL limit 1) AS f
+) AS g;
+
+SELECT ST_NumGeometries(geom) from voxelmpt WHERE classID=55 AND ifcID=30 AND geom IS NOT NULL limit 1;
+
+
 DO $$  
+DECLARE  
+    f record;  
 BEGIN  
-    FOR idx in 1..118  
-    LOOP 
-        INSERT INTO voxelpatch(classID, ifcID, geom)   
-        VALUES (55, 27, PC_Patch(ARRAY(
-            SELECT V.pt
-            FROM (SELECT PC_MakePoint(1, ARRAY[x,y,z]) as pt FROM voxel WHERE classID=55) AS V 
-            JOIN road R ON ST_WITHIN(V.pt::geometry, R.geom) 
-            WHERE R.id=idx)));   
+    FOR f in SELECT geom   
+        FROM voxelmpt WHERE classID=55 AND ifcID=30 AND geom IS NOT NULL 
+    LOOP  
+        INSERT INTO voxelpatch(classID, ifcID, pa)   
+        VALUES (55, 30, PC_Patch(ARRAY(
+            SELECT PC_MakePoint(1, ARRAY[x,y,z]) as pt FROM (
+                SELECT ST_X((ST_DumpPoints(f.geom)).geom) AS x, 
+                ST_Y((ST_DumpPoints(f.geom)).geom) AS y, 
+                ST_Z((ST_DumpPoints(f.geom)).geom) AS z
+                ) AS g
+            )));
     END LOOP;  
 END;  
 $$
 
 
+-- ************ road ************
+DO $$  
+BEGIN  
+    FOR idx in 1..118  
+    LOOP 
+        INSERT INTO voxelpatch(classID, ifcID, pa)   
+        VALUES (56, 27, PC_Patch(ARRAY(
+            SELECT V.pt
+            FROM (SELECT PC_MakePoint(1, ARRAY[x,y,z]) as pt FROM voxel WHERE classID=56) AS V 
+            JOIN road R ON ST_WITHIN(V.pt::geometry, R.geom) 
+            WHERE R.id=idx)));
+        DELETE FROM voxelpatch WHERE classID=56 AND ifcID=27 AND PC_NumPoints(pa) < 1;  
+    END LOOP;  
+END;  
+$$
+
+
+DO $$  
+DECLARE  
+    f record;  
+BEGIN  
+    FOR f in SELECT geom   
+        FROM voxelmpt WHERE classID=56 AND ifcID=27 AND geom IS NOT NULL 
+    LOOP  
+        INSERT INTO voxelpatch(classID, ifcID, pa)   
+        VALUES (56, 27, PC_Patch(ARRAY(
+            SELECT PC_MakePoint(1, ARRAY[x,y,z]) as pt FROM (
+                SELECT ST_X((ST_DumpPoints(f.geom)).geom) AS x, 
+                ST_Y((ST_DumpPoints(f.geom)).geom) AS y, 
+                ST_Z((ST_DumpPoints(f.geom)).geom) AS z
+                ) AS g
+            )));
+    END LOOP;  
+END;  
+$$
+
+
+-- ************ greenarea ************
+DO $$  
+BEGIN  
+    FOR idx in 1..120  
+    LOOP 
+        INSERT INTO voxelpatch(classID, ifcID, pa)   
+        VALUES (56, 28, PC_Patch(ARRAY(
+            SELECT V.pt
+            FROM (SELECT PC_MakePoint(1, ARRAY[x,y,z]) as pt FROM voxel WHERE classID=56) AS V 
+            JOIN greenareas G ON ST_WITHIN(V.pt::geometry, G.geom) 
+            WHERE G.gid=idx)));
+        DELETE FROM voxelpatch WHERE classID=56 AND ifcID=28 AND PC_NumPoints(pa) < 1;
+    END LOOP;  
+END;  
+$$
+
+
+DO $$  
+DECLARE  
+    f record;  
+BEGIN  
+    FOR f in SELECT geom   
+        FROM voxelmpt WHERE classID=56 AND ifcID=28 AND geom IS NOT NULL 
+    LOOP  
+        INSERT INTO voxelpatch(classID, ifcID, pa)   
+        VALUES (56, 28, PC_Patch(ARRAY(
+            SELECT PC_MakePoint(1, ARRAY[x,y,z]) as pt FROM (
+                SELECT ST_X((ST_DumpPoints(f.geom)).geom) AS x, 
+                ST_Y((ST_DumpPoints(f.geom)).geom) AS y, 
+                ST_Z((ST_DumpPoints(f.geom)).geom) AS z
+                ) AS g
+            )));
+    END LOOP;  
+END;  
+$$
+
+-- ************ building ************
 DO $$  
 BEGIN  
     FOR idx in 1..121  
     LOOP 
         INSERT INTO voxelpatch(classID, ifcID, geom)   
-        VALUES (55, 29, PC_Patch(ARRAY(
+        VALUES (56, 29, PC_Patch(ARRAY(
             SELECT V.pt
-            FROM (SELECT PC_MakePoint(1, ARRAY[x,y,z]) as pt FROM voxel WHERE classID=55) AS V 
+            FROM (SELECT PC_MakePoint(1, ARRAY[x,y,z]) as pt FROM voxel WHERE classID=56) AS V 
             JOIN building B ON ST_WITHIN(V.pt::geometry, B.geom)
-            WHERE B.id=idx)));   
+            WHERE B.id=idx))); 
+        DELETE FROM voxelpatch WHERE classID=56 AND ifcID=29 AND PC_NumPoints(pa) < 1;  
     END LOOP;  
 END;  
 $$
  
 
-
+DO $$  
+DECLARE  
+    f record;  
+BEGIN  
+    FOR f in SELECT geom   
+        FROM voxelmpt WHERE classID=56 AND ifcID=29 AND geom IS NOT NULL 
+    LOOP  
+        INSERT INTO voxelpatch(classID, ifcID, pa)   
+        VALUES (56, 29, PC_Patch(ARRAY(
+            SELECT PC_MakePoint(1, ARRAY[x,y,z]) as pt FROM (
+                SELECT ST_X((ST_DumpPoints(f.geom)).geom) AS x, 
+                ST_Y((ST_DumpPoints(f.geom)).geom) AS y, 
+                ST_Z((ST_DumpPoints(f.geom)).geom) AS z
+                ) AS g
+            )));
+    END LOOP;  
+END;  
+$$
    
 
+DROP INDEX IF EXISTS idx_voxelpatch CASCADE;
+DROP INDEX IF EXISTS geom_voxelpatch CASCADE;
+CREATE INDEX idx_voxelpatch ON voxelpatch(classID, ifcID);
+CREATE INDEX geom_voxelpatch ON voxelpatch USING GIST(PC_EnvelopeGeometry(pa));
 
 
 
