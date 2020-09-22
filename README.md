@@ -1,4 +1,4 @@
 # Vox3DMod
 
 Overview of the Database Schema:
-![](Conceptual_Model.png)
+![](Voxel_Table_Diagram.png)
