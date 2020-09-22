@@ -1,2 +1,0 @@
-for i in `cat bldnum.txt`; do ./mkobj2 < bld$i.xyz | ./Wcpipe > bld$i.obj; done
-exit
